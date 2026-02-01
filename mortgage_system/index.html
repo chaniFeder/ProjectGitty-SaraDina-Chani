@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת ניהול משכנתאות</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .login-btn { background: #007bff; color: white; }
+        .register-btn { background: #28a745; color: white; }
+        .admin-btn { background: #dc3545; color: white; }
+        button:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>מערכת ניהול משכנתאות</h1>
+        
+        <div id="loginForm">
+            <h2>התחברות</h2>
+            <input type="text" id="username" placeholder="שם משתמש">
+            <input type="password" id="password" placeholder="סיסמה">
+            <button class="login-btn" onclick="login()">התחבר</button>
+            <button class="register-btn" onclick="showRegister()">לקוח חדש? הרשמה</button>
+            <button class="admin-btn" onclick="adminLogin()">כניסת מנהל</button>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            window.location.href = 'client-dashboard.html';
+        }
+        
+        function showRegister() {
+            window.location.href = 'register.html';
+        }
+        
+        function adminLogin() {
+            window.location.href = 'admin-dashboard.html';
+        }
+    </script>
+</body>
+</html>
