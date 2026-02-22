@@ -8,5 +8,6 @@ namespace Dal.Api
 {
     internal class IAppointments
     {
+    
     }
 }
