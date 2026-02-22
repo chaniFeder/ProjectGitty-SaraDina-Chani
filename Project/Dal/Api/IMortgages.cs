@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace Dal.Api
 {
-    internal interface IMortgages1
+    internal interface IMortgages<T>
     {
+        bool Create(T item);
+        List<T> GetAll();
+
+        List<T> Search(Func<bool, T> func);
+
+        bool Delete(T item);
+
+        bool Update(T item);
     }
 }
