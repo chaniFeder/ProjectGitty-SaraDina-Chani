@@ -1,5 +1,0 @@
-<Solution>
-  <Project Path="Bl/Bl.csproj" />
-  <Project Path="Dal/Dal.csproj" />
-  <Project Path="server/server.csproj" />
-</Solution>
