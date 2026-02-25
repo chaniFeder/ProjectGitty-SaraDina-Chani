@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Dal.Api
 {
-    public interface ICases<T>
+    public interface ICases<T> : ICrud<T>
     {
         bool Create(T item);
         List<T> GetAll();

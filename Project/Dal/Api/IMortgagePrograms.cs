@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Dal.Api
 {
-    public interface IMortgagePrograms<T>
+    public interface IMortgagePrograms<T> : ICrud<T>
     {
         bool Create(T item);
         List<T> GetAll();
