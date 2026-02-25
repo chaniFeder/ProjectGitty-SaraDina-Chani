@@ -8,7 +8,31 @@ using Dal.Models;
 
 namespace Dal.Services
 {
-    internal class CasesService : ICase<Case>
+    internal class CasesService : ICases<Case>
     {
+        public bool Create(Case item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(Case item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Case> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Case> Search(Func<Case, bool> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Case item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
