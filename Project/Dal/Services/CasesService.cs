@@ -10,6 +10,11 @@ namespace Dal.Services
 {
     internal class CasesService : ICases<Case>
     {
+        private dataManager dataManager;
+        public CasesService(dataManager dataManager)
+        {
+            this.dataManager = dataManager;
+        }
         public bool Create(Case item)
         {
             throw new NotImplementedException();

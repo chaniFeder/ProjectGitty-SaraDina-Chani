@@ -10,6 +10,11 @@ namespace Dal.Services
 {
     internal class BanksService : IBanks<Bank>
     {
+        private dataManager dataManager;
+        public BanksService(dataManager dataManager)
+        {
+            this.dataManager = dataManager;
+        }
         public bool Create(Bank item)
         {
             throw new NotImplementedException();

@@ -10,6 +10,11 @@ namespace Dal.Services
 {
     internal class AppointmentService : IAppointments<Appointment>
     {
+        private dataManager dataManager;
+        public AppointmentService(dataManager dataManager)
+        {
+            this.dataManager = dataManager;
+        }
         public bool Create(Appointment item)
         {
             throw new NotImplementedException();
