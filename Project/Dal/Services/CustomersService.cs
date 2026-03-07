@@ -17,27 +17,30 @@ namespace Dal.Services
         }
         public bool Create(Customer item)
         {
-            throw new NotImplementedException();
+            dataManager.Customers.Add(item);
+            return dataManager.SaveChanges() > 0;
         }
 
         public bool Delete(Customer item)
         {
-            throw new NotImplementedException();
+            dataManager.Customers.Remove(item);
+            return dataManager.SaveChanges() > 0;
         }
 
         public List<Customer> GetAll()
         {
-            throw new NotImplementedException();
+            return dataManager.Customers.ToList();
         }
 
         public List<Customer> Search(Func<Customer, bool> predicate)
         {
-            throw new NotImplementedException();
+            return dataManager.Customers.Where(predicate).ToList();
         }
 
         public bool Update(Customer item)
         {
-            throw new NotImplementedException();
+            dataManager.Customers.Update(item);
+            return dataManager.SaveChanges() > 0;
         }
     }
 }

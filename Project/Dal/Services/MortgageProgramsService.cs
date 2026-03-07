@@ -17,27 +17,30 @@ namespace Dal.Services
         }
         public bool Create(MortgageProgram item)
         {
-            throw new NotImplementedException();
+            dataManager.MortgagePrograms.Add(item);
+            return dataManager.SaveChanges() > 0;
         }
 
         public bool Delete(MortgageProgram item)
         {
-            throw new NotImplementedException();
+            dataManager.MortgagePrograms.Remove(item);
+            return dataManager.SaveChanges() > 0;
         }
 
         public List<MortgageProgram> GetAll()
         {
-            throw new NotImplementedException();
+            return dataManager.MortgagePrograms.ToList();
         }
 
         public List<MortgageProgram> Search(Func<MortgageProgram, bool> predicate)
         {
-            throw new NotImplementedException();
+            return dataManager.MortgagePrograms.Where(predicate).ToList();
         }
 
         public bool Update(MortgageProgram item)
         {
-            throw new NotImplementedException();
+            dataManager.MortgagePrograms.Update(item);
+            return dataManager.SaveChanges() > 0;
         }
     }
 }

@@ -17,27 +17,30 @@ namespace Dal.Services
         }
         public bool Create(Appointment item)
         {
-            throw new NotImplementedException();
+            dataManager.Appointments.Add(item);
+            return dataManager.SaveChanges() > 0;
         }
 
         public bool Delete(Appointment item)
         {
-            throw new NotImplementedException();
+            dataManager.Appointments.Remove(item);
+            return dataManager.SaveChanges() > 0;
         }
 
         public List<Appointment> GetAll()
         {
-            throw new NotImplementedException();
+            return dataManager.Appointments.ToList();
         }
 
         public List<Appointment> Search(Func<Appointment, bool> predicate)
         {
-            throw new NotImplementedException();
+            return dataManager.Appointments.Where(predicate).ToList();
         }
 
         public bool Update(Appointment item)
         {
-            throw new NotImplementedException();
+            dataManager.Appointments.Update(item);
+            return dataManager.SaveChanges() > 0;
         }
     }
 }
