@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bl.Models.Admin
+namespace Bl.Api.IAdvisorServices
 {
-    internal class AdminDetails
+    internal class IDocuments
     {
+      bool  VerifyDocument(int documentId, bool isVerified);
+
 
     }
 }

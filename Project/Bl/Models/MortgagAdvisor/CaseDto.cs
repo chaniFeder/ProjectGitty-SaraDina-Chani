@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.MortgagAdvisor
 {
-    internal class MortgageCase
+    internal class CaseDto
     {
+        public int CaseId { get; set; }
 
+        public DateTime CreatedAt { get; set; }
     }
 }
