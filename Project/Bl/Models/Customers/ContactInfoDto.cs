@@ -8,5 +8,8 @@ namespace Bl.Models.Customers
 {
     internal class ContactInfoDto
     {
+        public int Name { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

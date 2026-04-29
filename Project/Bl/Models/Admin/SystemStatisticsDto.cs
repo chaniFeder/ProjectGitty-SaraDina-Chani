@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Admin
 {
-    internal class SystemStatistics
+    internal class SystemStatisticsDto
     {
         public int ActiveCases { get; set; }
         public decimal ExpectedRevenue { get; set; }
