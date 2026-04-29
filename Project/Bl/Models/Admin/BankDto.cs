@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bl.Models.Customers
+namespace Bl.Models.Admin
 {
-    internal class CustomerDetails
+    internal class BankDto
     {
     }
 }

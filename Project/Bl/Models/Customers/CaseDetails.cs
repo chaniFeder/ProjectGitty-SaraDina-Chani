@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Customers
 {
-    internal class __CaseDetails
+    internal class CaseDetails
     {
     }
 }
