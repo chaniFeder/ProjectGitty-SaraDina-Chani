@@ -9,8 +9,6 @@
   <ItemGroup>
     <Folder Include="Api\IAdvisorServices\" />
 
-    <Folder Include="Services\" />
-
   </ItemGroup>
 
   <ItemGroup>
