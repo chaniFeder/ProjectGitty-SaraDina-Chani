@@ -38,6 +38,7 @@ namespace Bl.Services.CustomerServices
                 CreatedDate = a.CreatedDate
             }).ToList();
         }
+        
 
         AppointmentResponseDto IAppointment.RequestAppointment(string customerId, AppointmentRequestDto request)
         {
@@ -89,3 +90,4 @@ namespace Bl.Services.CustomerServices
         }
     }
 }
+
