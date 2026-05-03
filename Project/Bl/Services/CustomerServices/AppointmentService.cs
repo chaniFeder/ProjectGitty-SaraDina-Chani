@@ -16,11 +16,7 @@ namespace Bl.Services.CustomerServices
             this.dal = dal;
         }
 
-<<<<<<< Updated upstream
         List<AppointmentResponseDto> IAppointment.GetMyUpcomingAppointments(string customerId)
-=======
-        List<AppointmentResponseDto> IAppointment.GetMyUpcomingAppointments( customerId)
->>>>>>> Stashed changes
         {
             var appointments = dal?.Appointments?.Search(a =>
                a.CustomerId == customerId &&
@@ -44,8 +40,37 @@ namespace Bl.Services.CustomerServices
 
         AppointmentResponseDto IAppointment.RequestAppointment(int customerId, AppointmentRequestDto request)
         {
-            throw new NotImplementedException();
+            if (request is null) throw new ArgumentNullException(nameof(request));
+            if (dal?.Appointments == null) throw new InvalidOperationException("DAL appointments service is not available.");
+
+            var entity = new Dal.Models.Appointment
+            {
+                CustomerId = customerId.ToString(),
+                UserId = request.UserId,
+                AppointmentDate = request.AppointmentDate,
+                Duration = request.Duration,
+                Status = request.Status,
+                Notes = request.Notes,
+                MeetingType = request.MeetingType,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            var created = dal.Appointments.Create(entity);
+            if (!created) throw new InvalidOperationException("Failed to create appointment in DAL.");
+
+            return new AppointmentResponseDto
+            {
+                AppointmentId = entity.AppointmentId,
+                CustomerId = entity.CustomerId,
+                UserId = entity.UserId,
+                AppointmentDate = entity.AppointmentDate,
+                Duration = entity.Duration,
+                Status = entity.Status,
+                Notes = entity.Notes,
+                MeetingType = entity.MeetingType,
+                CreatedDate = entity.CreatedDate
+            };
+
         }
     }
-}
 
