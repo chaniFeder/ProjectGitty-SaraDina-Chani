@@ -1,0 +1,16 @@
+﻿using Bl.Models.Customers;
+using Dal.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Bl.Api.ICustomerServices
+{
+    internal interface IDocument
+    {
+        bool UploadDocument(int customerId, DocumentUploadDto document);
+        List<Document> GetMyDocuments(int customerId);
+    }
+}
