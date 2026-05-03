@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dal.Api
 {
-    internal class IAppointments<T>
+    public class IAppointments<T>
     {
         bool Create(T item);
         List<T> GetAll();

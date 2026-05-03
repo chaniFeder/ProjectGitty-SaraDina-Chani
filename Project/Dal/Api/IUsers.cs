@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dal.Api
 {
-    internal interface IUsers<T>
+    public interface IUsers<T>
     {
         bool Create(T item);
         List<T> GetAll();

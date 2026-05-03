@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dal.Api
 {
-    internal interface IDocuments<T>
+    public interface IDocuments<T>
     {
         bool Create(T item);
         List<T> GetAll();

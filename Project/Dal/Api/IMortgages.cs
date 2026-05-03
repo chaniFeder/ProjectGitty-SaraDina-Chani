@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dal.Api
 {
-    internal interface IMortgages<T>
+    public interface IMortgages<T>
     {
         bool Create(T item);
         List<T> GetAll();
