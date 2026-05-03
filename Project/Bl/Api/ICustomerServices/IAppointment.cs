@@ -9,7 +9,7 @@ namespace Bl.Api.ICustomerServices
 {
     internal interface IAppointment
     {
-        AppointmentResponseDto RequestAppointment(int customerId, AppointmentRequestDto request);
-        List<AppointmentResponseDto> GetMyUpcomingAppointments(int customerId);
+        AppointmentResponseDto RequestAppointment(string customerId, AppointmentRequestDto request);
+        List<AppointmentResponseDto> GetMyUpcomingAppointments(string customerId);
     }
 }
