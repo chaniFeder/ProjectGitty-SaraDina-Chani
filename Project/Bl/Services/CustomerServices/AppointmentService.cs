@@ -16,7 +16,11 @@ namespace Bl.Services.CustomerServices
             this.dal = dal;
         }
 
+<<<<<<< Updated upstream
         List<AppointmentResponseDto> IAppointment.GetMyUpcomingAppointments(string customerId)
+=======
+        List<AppointmentResponseDto> IAppointment.GetMyUpcomingAppointments( customerId)
+>>>>>>> Stashed changes
         {
             var appointments = dal?.Appointments?.Search(a =>
                a.CustomerId == customerId &&
