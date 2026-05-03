@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Admin
 {
-    internal class BankDto
+    public class BankDto
     {
-        public int BankId { get; set; }
-
-        public string? BankName { get; set; }
 
         public int BankCode { get; set; }
 

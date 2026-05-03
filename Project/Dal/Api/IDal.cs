@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dal.Api
 {
-    internal interface IDal
+    public interface IDal
     {
         AppointmentService Appointments { get; }
         BanksService Banks { get; }
