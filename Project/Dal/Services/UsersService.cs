@@ -8,7 +8,7 @@ using Dal.Models;
 
 namespace Dal.Services
 {
-    internal class UsersService : IUsers<User>
+    public class UsersService : IUsers<User>
     {
         private dataManager dataManager;
         public UsersService(dataManager dataManager)

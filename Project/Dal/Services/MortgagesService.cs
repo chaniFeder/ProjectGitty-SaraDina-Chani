@@ -8,7 +8,7 @@ using Dal.Models;
 
 namespace Dal.Services
 {
-    internal class MortgageService : IMortgages<Mortgage>
+    public class MortgageService : IMortgages<Mortgage>
     {
         private dataManager dataManager;
         public MortgageService(dataManager dataManager)

@@ -8,7 +8,7 @@ using Dal.Models;
 
 namespace Dal.Services
 {
-    internal class AppointmentService : IAppointments<Appointment>
+    public class AppointmentService : IAppointments<Appointment>
     {
         private dataManager dataManager;
         public AppointmentService(dataManager dataManager)
