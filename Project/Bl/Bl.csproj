@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-
-    <Folder Include="Services\" />
-
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Dal\Dal.csproj" />
   </ItemGroup>
 

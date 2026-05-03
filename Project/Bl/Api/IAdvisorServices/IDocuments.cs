@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Bl.Api.IAdvisorServices
 {
-    internal class IDocuments
+    internal interface IDocuments
     {
       bool  VerifyDocument(int documentId, bool isVerified);
-
-
     }
 }

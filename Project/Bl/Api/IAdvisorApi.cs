@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bl.Models.MortgagAdvisor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Bl.Api
     internal interface IAdvisorApi
     {
         IEnumerable GetCustomerCases(int advisorId);
-        MortgageCase ReviewCase(int caseId);
+        MortgageCaseDto ReviewCase(int caseId);
     }
 }

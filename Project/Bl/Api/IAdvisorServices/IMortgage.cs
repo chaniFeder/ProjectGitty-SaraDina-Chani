@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bl.Models.MortgagAdvisor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace Bl.Api.IAdvisorServices
 {
     internal interface IMortgage
     {
-      void  CalculateMortgageMix(int customerId, MortgageMixRequestDto request);
+        void  CalculateMortgageMix(int customerId, MortgageMixRequestDto request);
 
-      void CompareMortgagePrograms(decimal amount, int term)
+        void CompareMortgagePrograms(decimal amount, int term);
     }
 }

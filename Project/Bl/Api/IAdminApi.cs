@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bl.Models.Admin;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Bl.Api
     {
         bool Login(string username, string password);
         string GetSystemStatistics();
-        IEnumerable FilterCases(FilterCriteria criteria);
-        bool EditCase(int caseId, CaseEditDetails details);
+        IEnumerable FilterCases(FilterCriteriaDto criteria);
+        bool EditCase(int caseId, CaseEditDetailsDto details);
     }
 }
