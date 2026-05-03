@@ -8,7 +8,7 @@ using Dal.Models;
 
 namespace Dal.Services
 {
-    internal class CustomersService : ICustomers<Customer>
+    public class CustomersService : ICustomers<Customer>
     {
         private dataManager dataManager;
         public CustomersService(dataManager dataManager)
