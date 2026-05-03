@@ -11,6 +11,6 @@ namespace Bl.Api
     internal interface IAdvisorApi
     {
         IEnumerable GetCustomerCases(int advisorId);
-        MortgageCase ReviewCase(int caseId);
+        MortgageCaseDto ReviewCase(int caseId);
     }
 }

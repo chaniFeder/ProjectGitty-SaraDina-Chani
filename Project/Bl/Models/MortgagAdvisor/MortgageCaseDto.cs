@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bl.Models.Admin
+namespace Bl.Models.MortgagAdvisor
 {
-    internal class CaseEditDetails
+    internal class MortgageCaseDto
     {
     }
 }

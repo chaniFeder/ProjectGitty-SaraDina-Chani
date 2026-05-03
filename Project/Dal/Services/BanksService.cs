@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Dal.Services
 {
-    internal class BanksService : IBanks<Bank>
+    public class BanksService : IBanks<Bank>
     {
         private dataManager dataManager;
         public BanksService(dataManager dataManager)
