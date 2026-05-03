@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Api\IAdvisorServices\" />
-
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Dal\Dal.csproj" />
   </ItemGroup>
 
