@@ -21,5 +21,6 @@ namespace Bl.Models.MortgagAdvisor
         public string? Notes { get; set; }
 
         public string MeetingType { get; set; }
+       
     }
 }

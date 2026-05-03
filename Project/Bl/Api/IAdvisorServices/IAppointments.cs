@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Bl.Api.IAdvisorServices
 {
-    internal interface IAppointments
+    public interface IAppointments
     {
-      List <Appointment>  GetMyDailySchedule(int userId, DateTime date);
+      List <Appointment>  GetMyDailySchedule(string userId, DateTime date);
 
-      Appointment ScheduleAppointment(AppointmentDto appointment);
+      Appointment ScheduleAppointment(AppointmentDto appointment,int Userid);
     }
 }
