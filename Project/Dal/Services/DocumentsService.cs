@@ -8,7 +8,7 @@ using Dal.Models;
 
 namespace Dal.Services
 {
-    internal class DocumentsService : IDocuments<Document>
+    public class DocumentsService : IDocuments<Document>
     {
         private dataManager dataManager;
         public DocumentsService(dataManager dataManager)
