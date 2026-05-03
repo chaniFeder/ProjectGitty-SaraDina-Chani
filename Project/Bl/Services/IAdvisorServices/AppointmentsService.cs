@@ -17,8 +17,19 @@ namespace Bl.Services.IAdvisorServices
             throw new NotImplementedException();
         }
 
+        public List<AppointmentResponseDto> GetMyUpcomingAppointments(string customerId)
+        {
+            throw new NotImplementedException();
+        }
+
         public AppointmentResponseDto RequestAppointment(int customerId, AppointmentRequestDto request)
         {
             throw new NotImplementedException();
         }
+
+        public AppointmentResponseDto RequestAppointment(string customerId, AppointmentRequestDto request)
+        {
+            throw new NotImplementedException();
+        }
     }
+}
