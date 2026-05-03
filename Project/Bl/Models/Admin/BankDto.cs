@@ -8,9 +8,6 @@ namespace Bl.Models.Admin
 {
     public class BankDto
     {
-<<<<<<< Updated upstream
-=======
-        public string BankName { get; set; }
 
         public int BankCode { get; set; }
 
@@ -25,6 +22,5 @@ namespace Bl.Models.Admin
         public double? MinLoanAmount { get; set; }
 
         public double? MaxLoanAmount { get; set; }
->>>>>>> Stashed changes
     }
 }

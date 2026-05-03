@@ -1,0 +1,92 @@
+1. שירותי הלקוח הקצה (IClientService)
+הלקוח צריך גישה מוגבלת לנתונים של עצמו בלבד (בדרך כלל המזהה שלו, customerId, יילקח מהטוקן של ההתחברות כדי למנוע ממנו למשוך נתונים של אחרים).
+
+פרופיל אישי (Customer):
+
+GetMyProfile(int customerId) - צפייה בפרטים האישיים.
+
+UpdateMyContactInfo(int customerId, ContactInfoDto dto) - עדכון טלפון/מייל (לא כולל שדות רגישים כמו הכנסה חודשית שדורשים אימות).
+
+תיקים ומשכנתאות (Case, Mortgage):
+
+GetMyCases(int customerId) - רשימת התיקים של הלקוח וסטטוס הטיפול בהם.
+
+GetMortgageDetails(int mortgageId) - צפייה בנתוני משכנתא קיימת/מוצעת (תמהיל, ריביות).
+
+מסמכים (Document):
+
+UploadDocument(int customerId, DocumentUploadDto document) - העלאת מסמך (למשל תלוש שכר).
+
+GetMyDocuments(int customerId) - צפייה במסמכים שהועלו וסטטוס האימות שלהם.
+
+תשלומים ולוח סילוקין (Payment):
+
+GetMyPaymentSchedule(int mortgageId) - הפקת לוח סילוקין לתצוגה (חישוב BL).
+
+פגישות (Appointment):
+
+RequestAppointment(int customerId, AppointmentRequestDto request) - בקשה לתיאום פגישה מול היועץ.
+
+GetMyUpcomingAppointments(int customerId) - צפייה בפגישות עתידיות.
+
+2. שירותי היועץ (IConsultantService)
+ליועץ יש הרשאות רחבות יותר, המאפשרות לו לנהל לקוחות, לבצע חישובים פיננסיים, ולאמת נתונים.
+
+ניהול לקוחות (Customer):
+
+GetAllMyCustomers(int userId) - רשימת הלקוחות המשויכים ליועץ הספציפי.
+
+GetCustomerFullDetails(int customerId) - קבלת תמונת מצב מלאה של לקוח (כולל הכנסות, תיקים, ומסמכים).
+
+RegisterNewCustomer(NewCustomerDto customer) - הקמת לקוח חדש במערכת.
+
+ניהול תיקים ומשכנתאות (Case, Mortgage):
+
+CreateNewCase(int customerId, CaseDto newCase) - פתיחת תיק ייעוץ חדש.
+
+UpdateCaseStatus(int caseId, string newStatus) - עדכון סטטוס תיק (לדוגמה: "ממתין לאישור בנק").
+
+CalculateMortgageMix(int customerId, MortgageMixRequestDto request) - פונקציית ליבה: חישוב תמהיל משכנתא, החזר חודשי וריביות משוערות.
+
+CompareMortgagePrograms(decimal amount, int term) - השוואה בין מסלולי בנקים שונים עבור סכום מסוים.
+
+ניהול מסמכים (Document):
+
+VerifyDocument(int documentId, bool isVerified) - אישור (או דחייה) של מסמך שהלקוח העלה לאחר בדיקתו.
+
+פגישות (Appointment):
+
+GetMyDailySchedule(int userId, DateTime date) - קבלת לו"ז פגישות יומי.
+
+ScheduleAppointment(AppointmentDto appointment) - קביעת פגישה יזומה עם לקוח.
+
+3. שירותי מנהל המערכת (IManagerService)
+המנהל שולט בהגדרות המערכת הגלובליות ורואה תמונת מצב רחבה. הוא אינו מנהל תיקים ספציפיים ביום-יום.
+
+ניהול עובדים ויועצים (User):
+
+GetAllConsultants() - רשימת כל היועצים במערכת.
+
+AddNewConsultant(UserDto user) - יצירת משתמש חדש מסוג יועץ.
+
+ToggleUserStatus(int userId, bool isActive) - השעיה או הפעלה של משתמש.
+
+ניהול בנקים ומסלולים (Bank, MortgageProgram):
+
+AddNewBank(BankDto bank) - הוספת בנק חדש למערכת.
+
+UpdateBankDetails(BankDto bank) - עדכון פרטי בנק.
+
+AddMortgageProgram(MortgageProgramDto program) - הוספת מסלול משכנתא (למשל "קל"צ ל-10 שנים").
+
+UpdateInterestRates(int programId, double newRate) - עדכון ריביות עדכניות למסלול ספציפי.
+
+דוחות ובקרה גלובלית (Case, Payment):
+
+GetSystemStatistics() - קבלת נתונים יבשים: סך התיקים הפעילים, הכנסות צפויות, אחוזי סגירה (חישובי BL שמקבצים נתונים מה-DAL).
+
+GetAllActiveCases() - צפייה בכלל התיקים הפעילים במשרד.
+
+חלוקה כזו שומרת על הקוד שלך ממוקד. היועץ לא מתעסק עם עדכון ריביות הבנק (זה תפקיד המנהל), והלקוח לא יכול לבנות לעצמו תמהיל או לאשר לעצמו מסמכים.
+
+האם תרצי שאדגים כיצד לממש את אחת מהפונקציות המורכבות יותר, למשל ה-CalculateMortgageMix (חישוב תמהיל) בשירות של היועץ, או שנעבור ללמוד איך מחברים את AutoMapper כדי להעביר נתונים בקלות?
