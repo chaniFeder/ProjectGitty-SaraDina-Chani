@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Customers
 {
-    internal class PaymentScheduleItem
+    internal class PaymentScheduleItemDto
     {
         public DateTime PaymentDate { get; set; }
         public double PaymentAmount { get; set; }

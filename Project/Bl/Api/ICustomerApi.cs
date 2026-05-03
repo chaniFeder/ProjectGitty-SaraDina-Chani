@@ -10,8 +10,8 @@ namespace Bl.Api
     internal interface ICustomerApi
     {
         bool Login(string username, string password);
-        bool Register(CustomerDetails details);
-        CaseDetails GetDashboardData(int customerId);
-        bool CreateNewCase(CaseDetails details);
+        bool Register(CustomerDetailsDto details);
+        CaseDetailsDto GetDashboardData(int customerId);
+        bool CreateNewCase(CaseDetailsDto details);
     }
 }

@@ -8,7 +8,7 @@ using Dal.Models;
 
 namespace Dal.Services
 {
-    internal class PaymentsService : IPayments<Payment>
+    public class PaymentsService : IPayments<Payment>
     {
         private dataManager dataManager;
         public PaymentsService(dataManager dataManager)
