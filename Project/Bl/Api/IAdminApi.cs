@@ -12,7 +12,7 @@ namespace Bl.Api
     {
         bool Login(string username, string password);
         string GetSystemStatistics();
-        IEnumerable FilterCases(FilterCriteria criteria);
-        bool EditCase(int caseId, CaseEditDetails details);
+        IEnumerable FilterCases(FilterCriteriaDto criteria);
+        bool EditCase(int caseId, CaseEditDetailsDto details);
     }
 }
