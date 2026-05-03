@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Api.ICustomerServices
 {
-    internal interface ICustomer
+    public interface ICustomer
     {
         CustomerDetailsDto GetMyProfile(int customerId);
         void UpdateMyContactInfo(int customerId, ContactInfoDto dto);

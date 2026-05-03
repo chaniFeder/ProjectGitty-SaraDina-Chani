@@ -105,6 +105,10 @@ public partial class dataManager : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            entity.Property(e => e.AdvisorId)
+                .HasMaxLength(9)
+                .IsUnicode(false)
+                .HasColumnName("AdvisorID");
 
             entity.HasOne(d => d.Bank).WithMany(p => p.Cases)
                 .HasForeignKey(d => d.BankId)

@@ -7,6 +7,8 @@ public partial class Case
 {
     public int CaseId { get; set; }
 
+    public string AdvisorId { get; set; }
+
     public string CaseType { get; set; } = null!;
 
     public string Status { get; set; } = null!;

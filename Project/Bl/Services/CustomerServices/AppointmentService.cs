@@ -11,7 +11,7 @@ namespace Bl.Services.CustomerServices
 {
     public class AppointmentService : IAppointment
     {
-        public IDal dal { get; set; }
+        private IDal dal { get; set; }
         public AppointmentService(IDal dal)
         {
             this.dal = dal;
@@ -48,10 +48,11 @@ namespace Bl.Services.CustomerServices
             // compute new appointment interval
             var newStart = request.AppointmentDate;
             var newEnd = newStart.AddMinutes(request.Duration);
+            var advisorId = GetAdvisorIdByName(request.AdvisorName);
 
             // find overlapping appointments for the same user (ignore cancelled)
             var overlapping = dal.Appointments.Search(a =>
-                a.UserId == request.UserId &&
+                a.UserId == advisorId &&
                 !(a.Status != null && a.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase)) &&
                 a.AppointmentDate < newEnd &&
                 a.AppointmentDate.AddMinutes(a.Duration) > newStart
@@ -87,6 +88,17 @@ namespace Bl.Services.CustomerServices
                 MeetingType = entity.MeetingType,
                 CreatedDate = entity.CreatedDate
             };
+        }
+        public string GetAdvisorIdByName(string advisorName)
+        {
+            if (string.IsNullOrWhiteSpace(advisorName))
+                throw new ArgumentNullException(nameof(advisorName)); 
+            var advisor = dal.Users.Search(a => a.Username.Equals(advisorName, StringComparison.OrdinalIgnoreCase) && a.Role == "advisor").FirstOrDefault();
+
+            if (advisor == null)
+                throw new InvalidOperationException("Advisor not found."); 
+
+            return advisor.UserId; 
         }
     }
 }
