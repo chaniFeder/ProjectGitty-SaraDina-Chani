@@ -9,6 +9,7 @@ namespace Bl.Models.Customers
     internal class AppointmentRequestDto
     {
         public string CustomerId { get; set; }
+        public string AdvisorName { get; set; }
 
         public string UserId { get; set; } 
 
