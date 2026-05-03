@@ -9,6 +9,6 @@ namespace Bl.Api.ICustomerServices
 {
     internal interface IPayment
     {
-        List<PaymentScheduleItemDto> GetMyPaymentSchedule(int mortgageId)
+        List<PaymentScheduleItemDto> GetMyPaymentSchedule(int mortgageId);
     }
 }
