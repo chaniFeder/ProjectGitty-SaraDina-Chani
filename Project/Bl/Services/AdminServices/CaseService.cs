@@ -13,9 +13,9 @@ namespace Bl.Services.AdminServices
             this.dal = dal;
         }
 
-        Case ICase.GetAllActiveCases()
+        List<Case> ICase.GetAllActiveCases()
         {
-            return dal.Cases.Search(c => c.Status == "Active").FirstOrDefault();
+            return dal.Cases.Search(c => c.Status == "Active");
         }
 
         SystemStatisticsDto ICase.SystemStatistics()

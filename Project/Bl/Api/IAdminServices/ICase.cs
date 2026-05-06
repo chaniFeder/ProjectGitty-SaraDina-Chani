@@ -11,6 +11,6 @@ namespace Bl.Api.IAdminServices
     internal interface ICase
     {
         SystemStatisticsDto SystemStatistics();
-        Case GetAllActiveCases();
+        List<Case> GetAllActiveCases();
     }
 }

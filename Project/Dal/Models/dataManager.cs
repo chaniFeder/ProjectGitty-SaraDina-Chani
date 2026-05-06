@@ -179,7 +179,7 @@ public partial class dataManager : DbContext
             entity.Property(e => e.LoanStatus)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("LoanStatus ");
+                .HasColumnName("LoanStatus");
             entity.Property(e => e.LoanType)
                 .HasMaxLength(50)
                 .IsUnicode(false);
