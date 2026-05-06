@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Dal\Dal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\AdminServices\" />
+  </ItemGroup>
+
 </Project>
