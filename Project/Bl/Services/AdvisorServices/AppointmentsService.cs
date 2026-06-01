@@ -1,73 +1,80 @@
-using Bl.Api.IAdvisorServices;
+﻿using Bl.Api.ICustomerServices;
 using Bl.Models.Customers;
 using Bl.Models.MortgagAdvisor;
 using Dal.Api;
 using Dal.Models;
+using Dal.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Bl.Services.IAdvisorServices
 {
-    public class AppointmentsService : IAppointments
-    {
-        private IDal dal { get; set; }
+   public class AppointmentsService : IAppointment
 
+    {
+        private readonly IDataManager dataManager;
+        private IDal dal { get; set; }
         public AppointmentsService(IDal dal)
         {
             this.dal = dal;
+            this.dataManager = dataManager;
         }
 
-        public List<Appointment> GetMyDailySchedule(string userId, DateTime date)
+
+        public List<AppointmentDto> GetMyUpcomingAppointments(string customerId)
         {
-            if (dal?.Appointments == null)
-                throw new InvalidOperationException("DAL appointments service is not available.");
+            var upcomingAppointments = dataManager.Appointments.Where(appointment => appointment.CustomerId == customerId && appointment.AppointmentDate > DateTime.Now).ToList();
 
-            return dal.Appointments.Search(a =>
-                a.UserId == userId &&
-                a.AppointmentDate.Date == date.Date
-            ) ?? new List<Appointment>();
-        }
-
-        public Appointment ScheduleAppointment(AppointmentDto appointment, int userId)
-        {
-            if (appointment == null)
-                throw new ArgumentNullException(nameof(appointment));
-
-            if (dal?.Appointments == null)
-                throw new InvalidOperationException("DAL appointments service is not available.");
-
-            // בדיקה אם כבר יש פגישה באותו זמן
-            var existingAppointment = dal.Appointments.Search(a =>
-                a.UserId == userId &&
-                a.AppointmentDate == appointment.AppointmentDate
-            );
-
-            if (existingAppointment != null && existingAppointment.Any())
-            {
-                throw new InvalidOperationException(
-                    "There is already an appointment at this time."
-                );
-            }
-
-            var newAppointment = new Appointment
+            // המרה ל- AppointmentDto
+            var responseDtos = upcomingAppointments.Select(appointment => new AppointmentDto
             {
                 CustomerId = appointment.CustomerId,
-                UserId = userId.ToString(),
+                UserId = appointment.UserId,
                 AppointmentDate = appointment.AppointmentDate,
                 Duration = appointment.Duration,
-                MeetingType = appointment.MeetingType,
-                Status = "Scheduled",
-                CreatedDate = DateTime.UtcNow
+                Status = appointment.Status,
+                Notes = appointment.Notes,
+                MeetingType = appointment.MeetingType
+            }).ToList();
+
+            return responseDtos;
+        }
+
+        public AppointmentResponseDto RequestAppointment(string customerId, AppointmentRequestDto request)
+        {
+            // יצירת אובייקט Appointment חדש
+            var newAppointment = new Appointment
+            {
+                CustomerId = customerId,
+                UserId = request.UserId,
+                AppointmentDate = request.AppointmentDate,
+                Duration = request.Duration,
+                Status = "Requested",
+                Notes = request.Notes,
+                MeetingType = request.MeetingType,
+                CreatedDate = DateTime.Now
             };
 
-            var created = dal.Appointments.Create(newAppointment);
+            // שמירת ההזמנה
+            dataManager.Appointments.Add(newAppointment);
+            dataManager.SaveChanges();
 
-            if (!created)
+            // החזרת התגובה
+            return new AppointmentResponseDto
             {
-                throw new InvalidOperationException(
-                    "Failed to create appointment."
-                );
-            }
-
-            return newAppointment;
+                AppointmentId = newAppointment.AppointmentId,
+                CustomerId = newAppointment.CustomerId,
+                UserId = newAppointment.UserId,
+                AppointmentDate = newAppointment.AppointmentDate,
+                Duration = newAppointment.Duration,
+                Status = newAppointment.Status,
+                Notes = newAppointment.Notes,
+                MeetingType = newAppointment.MeetingType,
+                CreatedDate = newAppointment.CreatedDate
+            };
         }
     }
 }

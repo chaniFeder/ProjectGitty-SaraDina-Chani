@@ -1,5 +1,7 @@
 ﻿using Bl.Api.IAdvisorServices;
 using Bl.Models.MortgagAdvisor;
+using Dal.Api;
+using Dal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +10,25 @@ using System.Threading.Tasks;
 
 namespace Bl.Services.IAdvisorServices
 {
-    internal class CaseService : ICase
+    public class CaseService : ICase
     {
-        public bool CreateNewCase(int customerId, CaseDto newCase)
+        private IDal dal { get; set; }
+        public CaseService(IDal dal)
         {
-            throw new NotImplementedException();
+            this.dal = dal;
+        }
+        public bool CreateNewCase(int customerId, CaseDto newCaseDto)
+        {
+            var newCase = new Case
+            {
+                AdvisorId = newCaseDto.AdvisorId,
+                CaseType = newCaseDto.CaseType,
+                Status = newCaseDto.Status,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            return dal.Cases.Create(newCase);
         }
 
         public bool UpdateCaseStatus(int caseId, string newStatus)
