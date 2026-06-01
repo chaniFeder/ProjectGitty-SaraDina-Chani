@@ -12,12 +12,14 @@ namespace Bl.Services.CustomerServices
     public class AppointmentService : IAppointment
     {
         public IDal dal { get; set; }
-        public AppointmentService(IDal dal) { 
+        public AppointmentService(IDal dal)
+        {
             this.dal = dal;
         }
 
         List<AppointmentResponseDto> IAppointment.GetMyUpcomingAppointments(string customerId)
         {
+            if (dal?.Appointments == null) throw new InvalidOperationException("DAL appointments service is not available.");
             var appointments = dal?.Appointments?.Search(a =>
                a.CustomerId == customerId &&
                a.AppointmentDate >= DateTime.UtcNow
@@ -38,7 +40,7 @@ namespace Bl.Services.CustomerServices
         }
         
 
-        AppointmentResponseDto IAppointment.RequestAppointment(int customerId, AppointmentRequestDto request)
+        AppointmentResponseDto IAppointment.RequestAppointment(string customerId, AppointmentRequestDto request)
         {
             if (request is null) throw new ArgumentNullException(nameof(request));
             if (dal?.Appointments == null) throw new InvalidOperationException("DAL appointments service is not available.");
@@ -46,6 +48,24 @@ namespace Bl.Services.CustomerServices
             var entity = new Dal.Models.Appointment
             {
                 CustomerId = customerId.ToString(),
+            // compute new appointment interval
+            var newStart = request.AppointmentDate;
+            var newEnd = newStart.AddMinutes(request.Duration);
+
+            // find overlapping appointments for the same user (ignore cancelled)
+            var overlapping = dal.Appointments.Search(a =>
+                a.UserId == request.UserId &&
+                !(a.Status != null && a.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase)) &&
+                a.AppointmentDate < newEnd &&
+                a.AppointmentDate.AddMinutes(a.Duration) > newStart
+            );
+
+            if (overlapping != null && overlapping.Any())
+                throw new InvalidOperationException("Requested time overlaps an existing appointment for the user.");
+
+            var entity = new Dal.Models.Appointment
+            {
+                CustomerId = customerId,
                 UserId = request.UserId,
                 AppointmentDate = request.AppointmentDate,
                 Duration = request.Duration,

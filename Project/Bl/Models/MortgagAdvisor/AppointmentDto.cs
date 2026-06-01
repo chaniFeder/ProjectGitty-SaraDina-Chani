@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bl.Models.Customers
+namespace Bl.Models.MortgagAdvisor
 {
-    internal class AppointmentRequestDto
+    internal class AppointmentDto
     {
         public string CustomerId { get; set; }
-        public string AdvisorName { get; set; }
 
-        public string UserId { get; set; } 
+        public string UserId { get; set; }
 
         public DateTime AppointmentDate { get; set; }
 
@@ -22,5 +21,6 @@ namespace Bl.Models.Customers
         public string? Notes { get; set; }
 
         public string MeetingType { get; set; }
+       
     }
 }

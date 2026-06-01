@@ -5,9 +5,9 @@ namespace Bl.Api
 {
     public interface IBl
     {
-        AdminService Admin { get; }
-        AdvisorService Advisor { get; }
-        CustomerService Customer { get; }
+        //AdminService Admin { get; }
+        //AdvisorService Advisor { get; }
+        //CustomerService Customer { get; }
     }
 }
 
