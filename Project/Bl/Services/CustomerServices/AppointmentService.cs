@@ -45,6 +45,9 @@ namespace Bl.Services.CustomerServices
             if (request is null) throw new ArgumentNullException(nameof(request));
             if (dal?.Appointments == null) throw new InvalidOperationException("DAL appointments service is not available.");
 
+            var entity = new Dal.Models.Appointment
+            {
+                CustomerId = customerId.ToString(),
             // compute new appointment interval
             var newStart = request.AppointmentDate;
             var newEnd = newStart.AddMinutes(request.Duration);
@@ -87,7 +90,7 @@ namespace Bl.Services.CustomerServices
                 MeetingType = entity.MeetingType,
                 CreatedDate = entity.CreatedDate
             };
+
         }
     }
-}
 
