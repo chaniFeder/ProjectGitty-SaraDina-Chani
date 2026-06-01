@@ -11,6 +11,8 @@ namespace Bl.Models.Admin
 
         public int BankCode { get; set; }
 
+        public string BankName { get; set; }
+
         public string? ContactPerson { get; set; }
 
         public string? PhoneNumber { get; set; }

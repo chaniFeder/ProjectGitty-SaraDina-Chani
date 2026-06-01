@@ -1,17 +1,13 @@
-﻿using Bl.Api.ICustomerServices;
+using Bl.Api.ICustomerServices;
 using Bl.Models.Customers;
 using Dal.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bl.Services.CustomerServices
 {
     public class AppointmentService : IAppointment
     {
         public IDal dal { get; set; }
+
         public AppointmentService(IDal dal)
         {
             this.dal = dal;
@@ -19,11 +15,13 @@ namespace Bl.Services.CustomerServices
 
         List<AppointmentResponseDto> IAppointment.GetMyUpcomingAppointments(string customerId)
         {
-            if (dal?.Appointments == null) throw new InvalidOperationException("DAL appointments service is not available.");
-            var appointments = dal?.Appointments?.Search(a =>
-               a.CustomerId == customerId &&
-               a.AppointmentDate >= DateTime.UtcNow
-           ) ?? new List<Dal.Models.Appointment>();
+            if (dal?.Appointments == null)
+                throw new InvalidOperationException("DAL appointments service is not available.");
+
+            var appointments = dal.Appointments.Search(a =>
+                a.CustomerId == customerId &&
+                a.AppointmentDate >= DateTime.UtcNow
+            ) ?? new List<Dal.Models.Appointment>();
 
             return appointments.Select(a => new AppointmentResponseDto
             {
@@ -38,30 +36,34 @@ namespace Bl.Services.CustomerServices
                 CreatedDate = a.CreatedDate
             }).ToList();
         }
-        
 
         AppointmentResponseDto IAppointment.RequestAppointment(string customerId, AppointmentRequestDto request)
         {
-            if (request is null) throw new ArgumentNullException(nameof(request));
-            if (dal?.Appointments == null) throw new InvalidOperationException("DAL appointments service is not available.");
+            if (request is null)
+                throw new ArgumentNullException(nameof(request));
 
-            var entity = new Dal.Models.Appointment
-            {
-                CustomerId = customerId.ToString(),
-            // compute new appointment interval
+            if (dal?.Appointments == null)
+                throw new InvalidOperationException("DAL appointments service is not available.");
+
             var newStart = request.AppointmentDate;
             var newEnd = newStart.AddMinutes(request.Duration);
 
-            // find overlapping appointments for the same user (ignore cancelled)
+            var advisorId = GetAdvisorIdByName(request.AdvisorName);
+
             var overlapping = dal.Appointments.Search(a =>
-                a.UserId == request.UserId &&
-                !(a.Status != null && a.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase)) &&
+                a.UserId == advisorId &&
+                !(a.Status != null &&
+                  a.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase)) &&
                 a.AppointmentDate < newEnd &&
                 a.AppointmentDate.AddMinutes(a.Duration) > newStart
             );
 
             if (overlapping != null && overlapping.Any())
-                throw new InvalidOperationException("Requested time overlaps an existing appointment for the user.");
+            {
+                throw new InvalidOperationException(
+                    "Requested time overlaps an existing appointment for the user."
+                );
+            }
 
             var entity = new Dal.Models.Appointment
             {
@@ -76,7 +78,9 @@ namespace Bl.Services.CustomerServices
             };
 
             var created = dal.Appointments.Create(entity);
-            if (!created) throw new InvalidOperationException("Failed to create appointment in DAL.");
+
+            if (!created)
+                throw new InvalidOperationException("Failed to create appointment in DAL.");
 
             return new AppointmentResponseDto
             {
@@ -90,7 +94,22 @@ namespace Bl.Services.CustomerServices
                 MeetingType = entity.MeetingType,
                 CreatedDate = entity.CreatedDate
             };
+        }
 
+        private string GetAdvisorIdByName(string advisorName)
+        {
+            if (string.IsNullOrWhiteSpace(advisorName))
+                throw new ArgumentNullException(nameof(advisorName));
+
+            var advisor = dal.Users.Search(u =>
+                u.Username.Equals(advisorName, StringComparison.OrdinalIgnoreCase) &&
+                u.Role == "advisor"
+            ).FirstOrDefault();
+
+            if (advisor == null)
+                throw new InvalidOperationException("Advisor not found.");
+
+            return advisor.UserId;
         }
     }
-
+}

@@ -1,4 +1,5 @@
-﻿using Bl.Models.MortgagAdvisor;
+﻿﻿using Bl.Models.Customers;
+using Bl.Models.MortgagAdvisor;
 using Dal.Models;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Bl.Api.IAdvisorServices
 {
-    public interface IAppointments
+    internal interface IAppointments
     {
-      List <Appointment>  GetMyDailySchedule(string userId, DateTime date);
+        public List<AppointmentDto> GetMyUpcomingAppointments(string customerId);
 
-      Appointment ScheduleAppointment(AppointmentDto appointment,int Userid);
+        public AppointmentResponseDto RequestAppointment(string customerId, AppointmentRequestDto request);
     }
 }

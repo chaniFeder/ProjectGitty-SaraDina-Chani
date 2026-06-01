@@ -8,8 +8,8 @@ namespace Bl.Models.MortgagAdvisor
 {
     internal class CaseDto
     {
-        public int CaseId { get; set; }
-
-        public DateTime CreatedAt { get; set; }
+        public string AdvisorId { get; set; }
+        public string CaseType { get; set; }
+        public string Status { get; set; }
     }
 }

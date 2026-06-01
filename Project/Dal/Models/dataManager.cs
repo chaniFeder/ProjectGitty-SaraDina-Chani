@@ -105,6 +105,10 @@ public partial class dataManager : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            entity.Property(e => e.AdvisorId)
+                .HasMaxLength(9)
+                .IsUnicode(false)
+                .HasColumnName("AdvisorID");
 
             entity.HasOne(d => d.Bank).WithMany(p => p.Cases)
                 .HasForeignKey(d => d.BankId)
@@ -175,7 +179,7 @@ public partial class dataManager : DbContext
             entity.Property(e => e.LoanStatus)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("LoanStatus ");
+                .HasColumnName("LoanStatus");
             entity.Property(e => e.LoanType)
                 .HasMaxLength(50)
                 .IsUnicode(false);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Api.ICustomerServices
 {
-    internal interface IMortgage
+    public interface IMortgage
     {
         Mortgage GetMortgageDetails(int mortgageId);
     }

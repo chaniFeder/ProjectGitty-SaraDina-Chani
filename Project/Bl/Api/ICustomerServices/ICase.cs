@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Bl.Api.ICustomerServices
 {
-    internal interface ICase
+    public interface ICase
     {
-        List<Case> GetMyCases(int customerId);
+        List<Case> GetMyCases(string customerId);
     }
 }

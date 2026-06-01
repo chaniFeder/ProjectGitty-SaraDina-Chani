@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Api.ICustomerServices
 {
-    internal interface IDocument
+    public interface IDocument
     {
         bool UploadDocument(int customerId, DocumentUploadDto document);
         List<Document> GetMyDocuments(int customerId);
