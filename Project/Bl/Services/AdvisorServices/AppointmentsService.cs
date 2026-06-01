@@ -1,30 +1,73 @@
-﻿using Bl.Api.ICustomerServices;
+using Bl.Api.IAdvisorServices;
 using Bl.Models.Customers;
+using Bl.Models.MortgagAdvisor;
+using Dal.Api;
 using Dal.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bl.Services.IAdvisorServices
 {
-    internal class AppointmentsService : IAppointment
-
+    public class AppointmentsService : IAppointments
     {
-        public List<AppointmentResponseDto> GetMyUpcomingAppointments(int customerId)
+        private IDal dal { get; set; }
+
+        public AppointmentsService(IDal dal)
         {
-            throw new NotImplementedException();
+            this.dal = dal;
         }
 
-        public List<AppointmentResponseDto> GetMyUpcomingAppointments(string customerId)
+        public List<Appointment> GetMyDailySchedule(string userId, DateTime date)
         {
-            throw new NotImplementedException();
+            if (dal?.Appointments == null)
+                throw new InvalidOperationException("DAL appointments service is not available.");
+
+            return dal.Appointments.Search(a =>
+                a.UserId == userId &&
+                a.AppointmentDate.Date == date.Date
+            ) ?? new List<Appointment>();
         }
 
-        public AppointmentResponseDto RequestAppointment(string customerId, AppointmentRequestDto request)
+        public Appointment ScheduleAppointment(AppointmentDto appointment, int userId)
         {
-            throw new NotImplementedException();
+            if (appointment == null)
+                throw new ArgumentNullException(nameof(appointment));
+
+            if (dal?.Appointments == null)
+                throw new InvalidOperationException("DAL appointments service is not available.");
+
+            // בדיקה אם כבר יש פגישה באותו זמן
+            var existingAppointment = dal.Appointments.Search(a =>
+                a.UserId == userId &&
+                a.AppointmentDate == appointment.AppointmentDate
+            );
+
+            if (existingAppointment != null && existingAppointment.Any())
+            {
+                throw new InvalidOperationException(
+                    "There is already an appointment at this time."
+                );
+            }
+
+            var newAppointment = new Appointment
+            {
+                CustomerId = appointment.CustomerId,
+                UserId = userId.ToString(),
+                AppointmentDate = appointment.AppointmentDate,
+                Duration = appointment.Duration,
+                MeetingType = appointment.MeetingType,
+                Status = "Scheduled",
+                CreatedDate = DateTime.UtcNow
+            };
+
+            var created = dal.Appointments.Create(newAppointment);
+
+            if (!created)
+            {
+                throw new InvalidOperationException(
+                    "Failed to create appointment."
+                );
+            }
+
+            return newAppointment;
         }
     }
 }
