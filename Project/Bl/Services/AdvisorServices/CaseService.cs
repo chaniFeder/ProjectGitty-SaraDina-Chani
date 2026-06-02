@@ -33,7 +33,17 @@ namespace Bl.Services.IAdvisorServices
 
         public bool UpdateCaseStatus(int caseId, string newStatus)
         {
-            throw new NotImplementedException();
+            var existingCase = dal.Cases
+                .Search(c => c.CaseId == caseId)
+                .FirstOrDefault();
+
+            if (existingCase == null)
+                return false;
+
+            existingCase.Status = newStatus;
+            existingCase.UpdatedAt = DateTime.Now;
+
+            return dal.Cases.Update(existingCase);
         }
     }
 }

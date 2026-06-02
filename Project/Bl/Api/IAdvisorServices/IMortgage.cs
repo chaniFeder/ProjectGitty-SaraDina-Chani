@@ -9,8 +9,8 @@ namespace Bl.Api.IAdvisorServices
 {
     internal interface IMortgage
     {
-        void  CalculateMortgageMix(int customerId, MortgageMixRequestDto request);
+        public void CalculateMortgageMix(string customerId, MortgageMixRequestDto request);
 
-        void CompareMortgagePrograms(decimal amount, int term);
+        public List<MortgageProgramComparisonDto> CompareMortgagePrograms(double amount,int termYears);
     }
 }

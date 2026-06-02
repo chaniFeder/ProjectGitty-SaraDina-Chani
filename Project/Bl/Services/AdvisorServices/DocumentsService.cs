@@ -1,5 +1,6 @@
 ﻿using Bl.Api.ICustomerServices;
 using Bl.Models.Customers;
+using Dal.Api;
 using Dal.Models;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,55 @@ namespace Bl.Services.IAdvisorServices
 {
     internal class DocumentsService : IDocument
     {
-        public List<Document> GetMyDocuments(int customerId)
+
+        private IDal dal { get; set; }
+        public DocumentsService(IDal dal)
         {
-            throw new NotImplementedException();
+            this.dal = dal;
         }
 
-        public bool UploadDocument(int customerId, DocumentUploadDto document)
+        public bool VerifyDocument(int documentId, bool isVerified)
         {
-            throw new NotImplementedException();
+            var document = dal.Documents
+                .Search(d => d.DocumentId == documentId)
+                .FirstOrDefault();
+
+            if (document == null)
+                return false;
+
+            document.IsVerified = isVerified;
+
+            return dal.Documents.Update(document);
+        }
+        public List<Document> GetMyDocuments(string customerId)
+        {
+            return dal.Documents.Search(d => d.CustomerId == customerId);
+        }
+
+        public bool UploadDocument(DocumentUploadDto document)
+        {
+            string fileName = $"{Guid.NewGuid()}{document.FileExtension}";
+            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string filePath = Path.Combine(uploadsFolder, fileName);
+
+            File.WriteAllBytes(filePath, document.FileContent);
+
+            Document newDocument = new Document
+            {
+                CustomerId = document.CustomerId,
+                DocumentType = document.DocumentType,
+                DocumentName = document.DocumentName,
+                FilePath = filePath,
+                IsVerified = false
+            };
+
+            return dal.Documents.Create(newDocument);
         }
     }
 }
