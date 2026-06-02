@@ -9,7 +9,7 @@ namespace Bl.Api.IAdvisorServices
 {
     internal interface ICustomer
     {
-        List<ICustomer> GetAllMyCustomers(int userId);
+        List<ICustomer> GetAllMyCustomers(string userId);
 
         bool RegisterNewCustomer(NewCustomerDto customer);
 

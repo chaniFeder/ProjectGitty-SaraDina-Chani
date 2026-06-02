@@ -1,5 +1,6 @@
 ﻿using Bl.Api.ICustomerServices;
 using Bl.Models.Customers;
+using Dal.Api;
 using Dal.Models;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,15 @@ namespace Bl.Services.IAdvisorServices
 {
     internal class DocumentsService : IDocument
     {
-        public List<Document> GetMyDocuments(int customerId)
+
+        private IDal dal { get; set; }
+        public DocumentsService(IDal dal)
         {
-            throw new NotImplementedException();
+            this.dal = dal;
+        }
+        public List<Document> GetMyDocuments(string customerId)
+        {
+            return dal.Documents.Search(d => d.CustomerId == customerId);
         }
 
         public bool UploadDocument(int customerId, DocumentUploadDto document)
