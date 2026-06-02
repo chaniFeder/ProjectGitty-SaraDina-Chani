@@ -1,4 +1,5 @@
-﻿using Bl.Models.MortgagAdvisor;
+﻿using Bl.Models.Customers;
+using Bl.Models.MortgagAdvisor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,9 @@ namespace Bl.Api.IAdvisorServices
 {
     internal interface ICustomer
     {
-        List<ICustomer> GetAllMyCustomers(string userId);
-
+        public List<CustomerDetailsDto> GetAllMyCustomers(string userId);
+        List<CustomerDetailsDto> GetAllMyCustomers(string userId);
+        public bool RegisterNewCustomer(NewCustomerDto customer);
         bool RegisterNewCustomer(NewCustomerDto customer);
-
-
     }
 }

@@ -17,7 +17,7 @@ namespace Bl.Services.IAdvisorServices
     {
         private readonly IDataManager dataManager;
         private IDal dal { get; set; }
-        public AppointmentsService(IDal dal)
+        public AppointmentsService(IDal dal, IDataManager dataManager)
         {
             this.dal = dal;
             this.dataManager = dataManager;

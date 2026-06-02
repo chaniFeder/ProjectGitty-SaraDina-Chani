@@ -18,14 +18,49 @@ namespace Bl.Services.IAdvisorServices
         {
             this.dal = dal;
         }
+
+        public bool VerifyDocument(int documentId, bool isVerified)
+        {
+            var document = dal.Documents
+                .Search(d => d.DocumentId == documentId)
+                .FirstOrDefault();
+
+            if (document == null)
+                return false;
+
+            document.IsVerified = isVerified;
+
+            return dal.Documents.Update(document);
+        }
         public List<Document> GetMyDocuments(string customerId)
         {
             return dal.Documents.Search(d => d.CustomerId == customerId);
         }
 
-        public bool UploadDocument(int customerId, DocumentUploadDto document)
+        public bool UploadDocument(DocumentUploadDto document)
         {
-            throw new NotImplementedException();
+            string fileName = $"{Guid.NewGuid()}{document.FileExtension}";
+            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string filePath = Path.Combine(uploadsFolder, fileName);
+
+            File.WriteAllBytes(filePath, document.FileContent);
+
+            Document newDocument = new Document
+            {
+                CustomerId = document.CustomerId,
+                DocumentType = document.DocumentType,
+                DocumentName = document.DocumentName,
+                FilePath = filePath,
+                IsVerified = false
+            };
+
+            return dal.Documents.Create(newDocument);
         }
     }
 }
