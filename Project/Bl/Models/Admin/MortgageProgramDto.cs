@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Admin
 {
-    internal class MortgageProgramDto
+    public class MortgageProgramDto
     {
         public int ProgramId { get; set; }
 

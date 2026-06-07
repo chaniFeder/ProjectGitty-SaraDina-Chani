@@ -7,7 +7,9 @@ namespace Bl.Services.CustomerServices
 {
     public class DocumentService : IDocument
     {
-        private const string BasePath = @"D:\users\user\Documents\תרגול חני\פו\ProjectGitty-SaraDina-Chani\DocumentsUplode";
+        private static readonly string BasePath =
+            Environment.GetEnvironmentVariable("DOCUMENTS_PATH")
+            ?? Path.Combine(AppContext.BaseDirectory, "DocumentsUpload");
 
         private IDal dal { get; set; }
         public DocumentService(IDal dal)

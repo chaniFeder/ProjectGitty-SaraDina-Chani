@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.MortgagAdvisor
 {
-    internal class CaseDto
+    public class CaseDto
     {
         public string AdvisorId { get; set; }
         public string CaseType { get; set; }
