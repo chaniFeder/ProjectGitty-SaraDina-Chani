@@ -11,12 +11,12 @@ namespace Bl.Services.IAdvisorServices
 {
     internal class DocumentsService : IDocument
     {
-        public List<Document> GetMyDocuments(int customerId)
+        public List<Document> GetMyDocuments(string customerId)
         {
             throw new NotImplementedException();
         }
 
-        public bool UploadDocument(int customerId, DocumentUploadDto document)
+        public bool UploadDocument(string customerId, DocumentUploadDto document)
         {
             throw new NotImplementedException();
         }

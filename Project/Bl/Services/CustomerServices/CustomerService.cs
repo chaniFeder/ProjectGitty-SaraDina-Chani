@@ -12,9 +12,9 @@ namespace Bl.Services.CustomerServices
             this.dal = dal;
         }
 
-        CustomerDetailsDto ICustomer.GetMyProfile(int customerId)
+        CustomerDetailsDto ICustomer.GetMyProfile(string customerId)
         {
-            var customer = dal.Customers.Search(c => c.CustomerId == customerId.ToString()).FirstOrDefault();
+            var customer = dal.Customers.Search(c => c.CustomerId == customerId).FirstOrDefault();
             if (customer == null) return null;
             return new CustomerDetailsDto
             {
@@ -29,9 +29,9 @@ namespace Bl.Services.CustomerServices
             };
         }
 
-        void ICustomer.UpdateMyContactInfo(int customerId, ContactInfoDto dto)
+        void ICustomer.UpdateMyContactInfo(string customerId, ContactInfoDto dto)
         {
-            var customer = dal.Customers.Search(c => c.CustomerId == customerId.ToString()).FirstOrDefault();
+            var customer = dal.Customers.Search(c => c.CustomerId == customerId).FirstOrDefault();
             if (customer == null) return;
             customer.Email = dto.Email;
             customer.PhoneNumber = dto.PhoneNumber;

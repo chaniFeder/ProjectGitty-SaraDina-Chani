@@ -16,9 +16,9 @@ namespace server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ── EF Core ──────────────────────────────────────────────
+            // ── EF Core with SQLite ───────────────────────────────────
             builder.Services.AddDbContext<dataManager>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // ── DAL & JWT service ────────────────────────────────────
             builder.Services.AddScoped<IDal, DalManager>();
@@ -83,14 +83,32 @@ namespace server
 
             var app = builder.Build();
 
+            // יצירת הדאטהבייס אוטומטית אם לא קיים
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<dataManager>();
+                db.Database.EnsureCreated();
+
+                // Seed משתמשי ברירת מחדל אם הטבלה ריקה
+                if (!db.Users.Any())
+                {
+                    db.Users.AddRange(
+                        new User { UserId = "000000001", Username = "admin", Password = "admin123", Role = "admin" },
+                        new User { UserId = "000000002", Username = "advisor1", Password = "advisor123", Role = "advisor" }
+                    );
+                    db.SaveChanges();
+                }
+            }
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
             app.UseCors("ReactApp");
+            if (!app.Environment.IsDevelopment())
+                app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

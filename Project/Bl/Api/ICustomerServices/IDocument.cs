@@ -10,7 +10,7 @@ namespace Bl.Api.ICustomerServices
 {
     public interface IDocument
     {
-        bool UploadDocument(int customerId, DocumentUploadDto document);
-        List<Document> GetMyDocuments(int customerId);
+        bool UploadDocument(string customerId, DocumentUploadDto document);
+        List<Document> GetMyDocuments(string customerId);
     }
 }

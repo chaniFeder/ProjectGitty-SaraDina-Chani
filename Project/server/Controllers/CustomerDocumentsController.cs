@@ -27,23 +27,18 @@ namespace server.Controllers
         [HttpGet]
         public IActionResult GetMyDocuments()
         {
-            if (!int.TryParse(GetCustomerId(), out var id))
-                return BadRequest();
-
-            var docs = _service.GetMyDocuments(id);
+            var docs = _service.GetMyDocuments(GetCustomerId());
             return Ok(docs);
         }
 
         // POST api/customer/documents
-        // Accepts multipart/form-data: file + documentType + documentName
         [HttpPost]
         public async Task<IActionResult> UploadDocument(
             IFormFile file,
             [FromForm] string documentName,
             [FromForm] string? documentType)
         {
-            if (!int.TryParse(GetCustomerId(), out var id))
-                return BadRequest();
+            var customerId = GetCustomerId();
 
             if (file == null || file.Length == 0)
                 return BadRequest(new { message = "לא נבחר קובץ" });
@@ -53,14 +48,14 @@ namespace server.Controllers
 
             var dto = new DocumentUploadDto
             {
-                CustomerId = GetCustomerId(),
+                CustomerId = customerId,
                 DocumentName = documentName,
                 DocumentType = documentType,
                 FileContent = ms.ToArray(),
                 FileExtension = Path.GetExtension(file.FileName)
             };
 
-            var result = _service.UploadDocument(id, dto);
+            var result = _service.UploadDocument(customerId, dto);
             if (!result)
                 return StatusCode(500, new { message = "שגיאה בהעלאת המסמך" });
 

@@ -17,9 +17,9 @@ namespace Bl.Services.CustomerServices
             this.dal = dal;
         }
 
-        bool IDocument.UploadDocument(int customerId, DocumentUploadDto document)
+        bool IDocument.UploadDocument(string customerId, DocumentUploadDto document)
         {
-            var customer = dal.Customers.Search(c => c.CustomerId == customerId.ToString()).FirstOrDefault();
+            var customer = dal.Customers.Search(c => c.CustomerId == customerId).FirstOrDefault();
             if (customer == null) return false;
 
             var documentType = document.DocumentType ?? "General";
@@ -32,7 +32,7 @@ namespace Bl.Services.CustomerServices
 
             var entity = new Document
             {
-                CustomerId = customerId.ToString(),
+                CustomerId = customerId,
                 DocumentType = documentType,
                 DocumentName = document.DocumentName,
                 FilePath = filePath
@@ -40,9 +40,9 @@ namespace Bl.Services.CustomerServices
             return dal.Documents.Create(entity);
         }
 
-        List<Document> IDocument.GetMyDocuments(int customerId)
+        List<Document> IDocument.GetMyDocuments(string customerId)
         {
-            return dal.Documents.Search(d => d.CustomerId == customerId.ToString());
+            return dal.Documents.Search(d => d.CustomerId == customerId);
         }
     }
 }

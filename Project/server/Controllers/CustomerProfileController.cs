@@ -27,10 +27,8 @@ namespace server.Controllers
         [HttpGet]
         public IActionResult GetProfile()
         {
-            if (!int.TryParse(GetCustomerId(), out var id))
-                return BadRequest();
-
-            var profile = _service.GetMyProfile(id);
+            var customerId = GetCustomerId();
+            var profile = _service.GetMyProfile(customerId);
             if (profile == null) return NotFound();
             return Ok(profile);
         }
@@ -39,10 +37,8 @@ namespace server.Controllers
         [HttpPut("contact")]
         public IActionResult UpdateContact([FromBody] ContactInfoDto dto)
         {
-            if (!int.TryParse(GetCustomerId(), out var id))
-                return BadRequest();
-
-            _service.UpdateMyContactInfo(id, dto);
+            var customerId = GetCustomerId();
+            _service.UpdateMyContactInfo(customerId, dto);
             return NoContent();
         }
     }
