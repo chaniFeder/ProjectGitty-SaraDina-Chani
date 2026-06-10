@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Customers
 {
-    internal class AppointmentRequestDto
+    public class AppointmentRequestDto
     {
         public string CustomerId { get; set; }
         public string AdvisorName { get; set; }

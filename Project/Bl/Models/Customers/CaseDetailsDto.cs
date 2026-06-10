@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Customers
 {
-    internal class CaseDetailsDto
+    public class CaseDetailsDto
     {
         public int CaseId { get; set; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Customers
 {
-    internal class DocumentUploadDto
+    public class DocumentUploadDto
     {
         public string CustomerId { get; set; }
 

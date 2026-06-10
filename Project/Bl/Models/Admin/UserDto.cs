@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.Admin
 {
-    internal class UserDto
+    public class UserDto
     {
         public string UserId { get; set; }
         public string Username { get; set; }

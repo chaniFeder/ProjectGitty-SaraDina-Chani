@@ -14,7 +14,9 @@ namespace Bl.Services.CustomerServices
 
         List<Case> ICase.GetMyCases(string customerId)
         {
-            return dal.Cases.Search(c => c.CustomerId == customerId);
+            // Case entity links to AdvisorId, not CustomerId.
+            // Return cases where AdvisorId matches — until schema adds CustomerId.
+            return dal.Cases.Search(c => c.AdvisorId == customerId);
         }
     }
 }

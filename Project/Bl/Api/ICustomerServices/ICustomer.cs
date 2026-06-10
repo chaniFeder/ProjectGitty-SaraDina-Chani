@@ -9,7 +9,7 @@ namespace Bl.Api.ICustomerServices
 {
     public interface ICustomer
     {
-        CustomerDetailsDto GetMyProfile(int customerId);
-        void UpdateMyContactInfo(int customerId, ContactInfoDto dto);
+        CustomerDetailsDto GetMyProfile(string customerId);
+        void UpdateMyContactInfo(string customerId, ContactInfoDto dto);
     }
 }

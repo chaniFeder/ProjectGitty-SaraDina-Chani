@@ -1,52 +1,40 @@
-﻿using Bl.Api.ICustomerServices;
+using Bl.Api.ICustomerServices;
 using Bl.Models.Customers;
-using Bl.Models.MortgagAdvisor;
 using Dal.Api;
 using Dal.Models;
-using Dal.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bl.Services.IAdvisorServices
 {
-   public class AppointmentsService : IAppointment
-
+    public class AppointmentsService : IAppointment
     {
-        private readonly IDataManager dataManager;
-        private IDal dal { get; set; }
-        public AppointmentsService(IDal dal, IDataManager dataManager)
+        private readonly IDal _dal;
+
+        public AppointmentsService(IDal dal)
         {
-            this.dal = dal;
-            this.dataManager = dataManager;
+            _dal = dal;
         }
 
-
-        public List<AppointmentDto> GetMyUpcomingAppointments(string customerId)
+        public List<AppointmentResponseDto> GetMyUpcomingAppointments(string customerId)
         {
-            var upcomingAppointments = dataManager.Appointments.Where(appointment => appointment.CustomerId == customerId && appointment.AppointmentDate > DateTime.Now).ToList();
-
-            // המרה ל- AppointmentDto
-            var responseDtos = upcomingAppointments.Select(appointment => new AppointmentDto
-            {
-                CustomerId = appointment.CustomerId,
-                UserId = appointment.UserId,
-                AppointmentDate = appointment.AppointmentDate,
-                Duration = appointment.Duration,
-                Status = appointment.Status,
-                Notes = appointment.Notes,
-                MeetingType = appointment.MeetingType
-            }).ToList();
-
-            return responseDtos;
+            return _dal.Appointments
+                .Search(a => a.CustomerId == customerId && a.AppointmentDate > DateTime.UtcNow)
+                .Select(a => new AppointmentResponseDto
+                {
+                    AppointmentId = a.AppointmentId,
+                    CustomerId = a.CustomerId,
+                    UserId = a.UserId,
+                    AppointmentDate = a.AppointmentDate,
+                    Duration = a.Duration,
+                    Status = a.Status,
+                    Notes = a.Notes,
+                    MeetingType = a.MeetingType,
+                    CreatedDate = a.CreatedDate
+                }).ToList();
         }
 
         public AppointmentResponseDto RequestAppointment(string customerId, AppointmentRequestDto request)
         {
-            // יצירת אובייקט Appointment חדש
-            var newAppointment = new Appointment
+            var entity = new Appointment
             {
                 CustomerId = customerId,
                 UserId = request.UserId,
@@ -55,25 +43,22 @@ namespace Bl.Services.IAdvisorServices
                 Status = "Requested",
                 Notes = request.Notes,
                 MeetingType = request.MeetingType,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.UtcNow
             };
 
-            // שמירת ההזמנה
-            dataManager.Appointments.Add(newAppointment);
-            dataManager.SaveChanges();
+            _dal.Appointments.Create(entity);
 
-            // החזרת התגובה
             return new AppointmentResponseDto
             {
-                AppointmentId = newAppointment.AppointmentId,
-                CustomerId = newAppointment.CustomerId,
-                UserId = newAppointment.UserId,
-                AppointmentDate = newAppointment.AppointmentDate,
-                Duration = newAppointment.Duration,
-                Status = newAppointment.Status,
-                Notes = newAppointment.Notes,
-                MeetingType = newAppointment.MeetingType,
-                CreatedDate = newAppointment.CreatedDate
+                AppointmentId = entity.AppointmentId,
+                CustomerId = entity.CustomerId,
+                UserId = entity.UserId,
+                AppointmentDate = entity.AppointmentDate,
+                Duration = entity.Duration,
+                Status = entity.Status,
+                Notes = entity.Notes,
+                MeetingType = entity.MeetingType,
+                CreatedDate = entity.CreatedDate
             };
         }
     }

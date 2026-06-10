@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.MortgagAdvisor
 {
-    internal class NewCustomerDto
+    public class NewCustomerDto
     {
         public string CustomerId { get; set; } = null!;
 
