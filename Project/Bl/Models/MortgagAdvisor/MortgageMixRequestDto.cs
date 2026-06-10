@@ -7,12 +7,22 @@ using System.Threading.Tasks;
 
 namespace Bl.Models.MortgagAdvisor
 {
-    internal class MortgageMixRequestDto
+    public class MortgageMixRequestDto
     {
         public int CaseId { get; set; }
 
         public string CaseType { get; set; } = null!;
 
-        public virtual Bank? Bank { get; set; }
+        public int BankId { get; set; }
+
+        public double LoanAmount { get; set; }
+
+        public double PropertyValue { get; set; }
+
+        public double DownPayment { get; set; }
+
+        public int LoanTermYears { get; set; }
+
+        public double MonthlyIncome { get; set; }
     }
 }
