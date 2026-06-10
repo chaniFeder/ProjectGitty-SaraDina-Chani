@@ -1,21 +1,26 @@
-# מערכת ניהול משכנתאות - Mortgage Management System
+# מערכת ניהול משכנתאות
 
-A comprehensive mortgage management system with a modern web interface and robust backend API. The system enables efficient case management, document handling, and advisor-client communication for mortgage processing.
-
----
-
-## 📋 Project Overview
-
-**ProjectGitty** is a full-stack mortgage management application designed to streamline the mortgage lending process. The system serves three main user roles:
-- **Clients**: Apply for mortgages, track case status, upload documents, and manage appointments
-- **Advisors**: Manage client cases, process applications, schedule meetings, and provide recommendations
-- **Admins**: Oversee system operations, manage banks, and monitor all cases
+מערכת שלמה לניהול משכנתאות עם ממשק משתמש מודרני בצד הלקוח ו-API חזק בצד השרת. המערכת מיועדת לניהול תיקים, העלאת מסמכים, תיאום פגישות ותקשורת בין יועצים ללקוחות.
 
 ---
 
-## 🏗️ Architecture
+## 📌 מה בקובץ
 
-The project follows a layered architecture:
+הפרויקט מחולק לשני חלקים עיקריים:
+- `mortgage-ui/` — ממשק frontend של React + TypeScript
+- `Project/` — backend של ASP.NET Core עם שכבת עסקית (BL) ושכבת גישה לנתונים (DAL)
+
+---
+
+## 🎯 תפקידים במערכת
+
+- **לקוחות**: יצירת תיקים, מעקב אחר סטטוס, העלאת מסמכים ותיאום פגישות
+- **יועצים**: ניהול תיקים של לקוחות, בדיקת מסמכים, עדכון סטטוס, והמלצות לתוכניות משכנתא
+- **מנהלים**: ניהול בנקים, מעקב אחר מקרים ותחזוקת המערכת
+
+---
+
+## 🏗️ ארכיטקטורה כללית
 
 ```
 Frontend (mortgage-ui)          Backend (Project)
@@ -30,174 +35,131 @@ Frontend (mortgage-ui)          Backend (Project)
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ טכנולוגיות עיקריות
 
 ### Frontend (`mortgage-ui/`)
-- **Framework**: React 19 with TypeScript
-- **Build Tool**: Vite 8
-- **Styling**: TailwindCSS 4
-- **Form Management**: React Hook Form + Zod (validation)
-- **UI Components**: Radix UI
-- **State Management**: Zustand
-- **HTTP Client**: Axios
-- **Routing**: React Router v7
-- **Icons**: Lucide React
+- React 19 + TypeScript
+- Vite 8
+- TailwindCSS 4
+- Zustand לניהול מצב
+- Axios לקריאות HTTP
+- React Router לניתוב
+- Radix UI ו-Lucide React לרכיבי ממשק
 
 ### Backend (`Project/`)
-- **Framework**: ASP.NET Core 8
-- **Language**: C#
-- **Database**: SQLite
-- **Authentication**: JWT (JSON Web Tokens)
-- **API Documentation**: Swagger/OpenAPI
-- **Architecture Layers**:
-  - **Server**: Web API controllers and program configuration
-  - **BL (Business Logic)**: Service implementations
-  - **DAL (Data Access Layer)**: Database operations and models
+- ASP.NET Core 8
+- C#
+- SQLite
+- JWT לאימות
+- Swagger/OpenAPI לתיעוד API
+- BL (Business Logic) לשכבת לוגיקה עסקית
+- DAL (Data Access Layer) לשכבת גישה לנתונים
 
 ---
 
-## 📁 Project Structure
+## 📁 מבנה הפרויקט
 
-### Frontend Structure
+### Frontend
 ```
 mortgage-ui/
 ├── src/
-│   ├── api/                 # API integration layer
-│   │   ├── admin.api.ts
-│   │   ├── advisor.api.ts
-│   │   ├── auth.api.ts
-│   │   ├── customer.api.ts
-│   │   └── client.ts
-│   ├── components/          # Reusable React components
-│   │   ├── layout/
-│   │   └── ui/
-│   ├── features/            # Feature-based modules
-│   │   ├── admin/
-│   │   ├── advisor/
-│   │   ├── auth/
-│   │   └── customer/
-│   ├── router/              # Route definitions & protection
-│   ├── store/               # Zustand state management
-│   ├── types/               # TypeScript type definitions
-│   └── utils/               # Utility functions
+│   ├── api/                 # חיבור ל-API
+│   ├── components/          # רכיבים כלליים
+│   ├── features/            # מודולים לפי תפקידים
+│   ├── router/              # ניתוב והרשאות
+│   ├── store/               # Zustand state
+│   ├── types/               # טיפוסים של TypeScript
+│   └── utils/               # פונקציות עזר
 ├── public/
 └── package.json
 ```
 
-### Backend Structure
+### Backend
 ```
 Project/
-├── server/                  # ASP.NET Core API
-│   ├── Controllers/
-│   │   ├── Admin/
-│   │   ├── Advisor/
-│   │   ├── AuthController.cs
-│   │   ├── CustomerAppointmentsController.cs
-│   │   ├── CustomerCasesController.cs
-│   │   ├── CustomerDocumentsController.cs
-│   │   ├── CustomerMortgageController.cs
-│   │   └── CustomerProfileController.cs
-│   ├── Services/
+├── server/                  # API של ASP.NET Core
+│   ├── Controllers/        # בקרי Web API
+│   ├── Services/           # שירותי עיבוד
 │   ├── Program.cs
 │   └── appsettings.json
-├── BL/                     # Business Logic Layer
+├── BL/                     # לוגיקה עסקית
 │   ├── Services/
-│   │   ├── AdminServices/
-│   │   ├── AdvisorServices/
-│   │   └── CustomerServices/
 │   ├── Models/
 │   └── Api/
-├── DAL/                    # Data Access Layer
+├── DAL/                    # גישה לנתונים
 │   ├── Services/
 │   ├── Api/
 │   ├── Models/
-│   │   ├── Appointment.cs
-│   │   ├── Bank.cs
-│   │   ├── Case.cs
-│   │   ├── Customer.cs
-│   │   ├── Document.cs
-│   │   ├── Mortgage.cs
-│   │   ├── MortgageProgram.cs
-│   │   ├── Payment.cs
-│   │   └── User.cs
 │   └── database/
-└── Ui/
+└── Ui/                     # אפליקציית ממשק שרת
 ```
 
 ---
 
-## 💾 Database Schema
+## 💾 מסד נתונים
 
-The system uses 6 main tables:
-
-### 1. Users (משתמשים)
-- user_id, username, password, full_name, email, phone, address, id_number, user_type, created_date
-
-### 2. Cases (תיקים)
-- case_id, user_id, case_type, status, bank_id, property_address, loan_amount, monthly_income, created_date, last_updated, priority
-
-### 3. Banks (בנקים)
-- bank_id, bank_name, contact_person, phone, email, interest_rate_min, interest_rate_max, processing_time_days, requirements
-
-### 4. Meetings (פגישות)
-- meeting_id, case_id, meeting_date, meeting_type, location, notes, status
-
-### 5. Documents (מסמכים)
-- document_id, case_id, document_type, file_path, upload_date, status, required
-
-### 6. Tasks (משימות)
-- task_id, case_id, task_description, due_date, assigned_to, status, priority, created_date
+המערכת משתמשת במסד SQLite עם טבלאות עיקריות עבור:
+- משתמשים
+- תיקים
+- בנקים
+- פגישות
+- מסמכים
+- תשלומים
 
 ---
 
-## 🚀 Getting Started
+## 🚀 איך להתחיל
 
-### Prerequisites
-- **Node.js**: v18+ (for frontend)
-- **.NET 8 SDK**: For backend development
-- **Git**: For version control
-- **Visual Studio Code** or **Visual Studio 2022**: Recommended IDEs
+### דרישות
+- Node.js 18+ (Frontend)
+- .NET 8 SDK (Backend)
+- Git
+- Visual Studio Code או Visual Studio 2022
 
-### Installation
+### התקנה
 
-#### 1. Clone the Repository
+#### 1. שכפול הריפו
 ```bash
 git clone <repository-url>
 cd ProjectGitty-SaraDina-Chani
 ```
 
-#### 2. Frontend Setup
-
+#### 2. התקנת Frontend
 ```bash
 cd mortgage-ui
 npm install
 ```
 
-#### 3. Backend Setup
-
+#### 3. התקנת Backend
 ```bash
 cd ../Project
-# Restore NuGet packages
 dotnet restore
 ```
 
 ---
 
-## 💻 Development
+## 💻 פיתוח
 
-### Running the Frontend
-
+### הפעלת Frontend
 ```bash
 cd mortgage-ui
 npm run dev
 ```
-Frontend will be available at `http://localhost:5173`
 
-Available npm scripts:
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run lint` - Run ESLint
-- `npm run preview` - Preview production build
+האתר יהיה זמין ב-`http://localhost:5173`
+
+### הפעלת Backend
+```bash
+cd Project
+dotnet run --project server/server.csproj
+```
+
+---
+
+## 📌 קיצור
+
+הפרויקט מיועד להדגמת מערכת משכנתאות מלאה עם ממשק משתמש, שירותי backend, אימות ואנליזה בסיסית. README זה מיועד לשימוש בעברית ומסביר את מבנה הפרויקט, הדרישות והפעלה בסיסית.
+
 
 ### Running the Backend
 
