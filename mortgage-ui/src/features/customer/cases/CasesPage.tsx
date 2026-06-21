@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FolderOpen, ChevronLeft } from 'lucide-react'
+import { fetchCases } from '@/store/casesSlice'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { customerApi } from '@/api/customer.api'
-import type { CaseDto, MortgageDto } from '@/types/customer.types'
+import { useState } from 'react'
+import type { MortgageDto } from '@/types/customer.types'
 import { Card, CardContent } from '@/components/ui/Card'
 import { Badge, statusVariant } from '@/components/ui/Badge'
 import { PageHeader } from '@/components/ui/PageHeader'
@@ -11,34 +14,43 @@ import { formatDate, translateStatus, translateCaseType, formatCurrency } from '
 
 export function CasesPage() {
   const navigate = useNavigate()
-  const [cases, setCases] = useState<CaseDto[]>([])
+  const dispatch = useAppDispatch()
+
+  // Redux state
+  const { data: cases, loading, error } = useAppSelector((s) => s.cases)
   const [mortgages, setMortgages] = useState<MortgageDto[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    Promise.all([customerApi.getCases(), customerApi.getMortgages()])
-      .then(([c, m]) => { setCases(c.data); setMortgages(m.data) })
-      .catch(() => setError('שגיאה בטעינת התיקים'))
-      .finally(() => setLoading(false))
-  }, [])
+    dispatch(fetchCases())
+    customerApi.getMortgages().then((r) => setMortgages(r.data))
+  }, [dispatch])
 
   if (loading) return <LoadingScreen />
 
   const mortgageByCase = (caseId: number) =>
-    mortgages.find(m => m.mortgageId === caseId)
+    mortgages.find((m) => m.mortgageId === caseId)
 
   return (
     <div className="p-8">
       <PageHeader title="התיקים שלי" subtitle={`סה״כ ${cases.length} תיקים`} />
 
-      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+      {error && (
+        <div className="flex items-center justify-between bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-4 text-sm text-red-700">
+          <span>{error}</span>
+          <button
+            onClick={() => dispatch(fetchCases())}
+            className="text-red-600 underline hover:no-underline"
+          >
+            נסה שוב
+          </button>
+        </div>
+      )}
 
       {cases.length === 0 ? (
         <EmptyState icon={FolderOpen} title="אין תיקים" description="אין תיקים פתוחים כרגע" />
       ) : (
         <div className="space-y-3">
-          {cases.map(c => {
+          {cases.map((c) => {
             const mortgage = mortgageByCase(c.caseId)
             return (
               <Card

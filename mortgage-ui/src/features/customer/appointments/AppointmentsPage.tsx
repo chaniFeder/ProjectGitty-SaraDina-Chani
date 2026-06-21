@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -40,10 +40,20 @@ export function AppointmentsPage() {
   const [showModal, setShowModal] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
 
+  // useRef — פוקוס אוטומטי על שדה היועץ בפתיחת המודל
+  const firstFieldRef = useRef<HTMLSelectElement>(null)
+
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { duration: '30' },
   })
+
+  // מפעיל פוקוס בכל פעם שהמודל נפתח
+  useEffect(() => {
+    if (showModal) {
+      setTimeout(() => firstFieldRef.current?.focus(), 50)
+    }
+  }, [showModal])
 
   const load = () =>
     Promise.all([customerApi.getAppointments(), customerApi.getAdvisors()])
@@ -129,6 +139,7 @@ export function AppointmentsPage() {
               <Select
                 label="יועץ"
                 {...register('userId')}
+                ref={firstFieldRef}
                 error={errors.userId?.message}
                 options={advisors.map(a => ({ value: a.userId, label: a.username }))}
                 placeholder="בחר יועץ"
