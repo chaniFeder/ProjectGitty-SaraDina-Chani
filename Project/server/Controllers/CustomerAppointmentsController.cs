@@ -35,10 +35,16 @@ namespace server.Controllers
         [HttpPost]
         public IActionResult RequestAppointment([FromBody] AppointmentRequestDto request)
         {
-            request.CustomerId = GetCustomerId();
-
-            var result = _service.RequestAppointment(GetCustomerId(), request);
-            return Ok(result);
+            try
+            {
+                request.CustomerId = GetCustomerId();
+                var result = _service.RequestAppointment(GetCustomerId(), request);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }
