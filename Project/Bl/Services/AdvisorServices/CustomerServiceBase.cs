@@ -1,23 +1,13 @@
-﻿using Bl.Api.IAdvisorServices;
-using Bl.Models.Customers;
+﻿using Bl.Models.Customers;
 using Bl.Models.MortgagAdvisor;
 using Dal.Api;
 using Dal.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bl.Services.IAdvisorServices
 {
-    public class CustomerService : ICustomer
+    public class CustomerServiceBase
     {
         private IDal dal { get; set; }
-        public CustomerService(IDal dal)
-        {
-            this.dal = dal;
-        }
         public List<CustomerDetailsDto> GetAllMyCustomers(string userId)
         {
 

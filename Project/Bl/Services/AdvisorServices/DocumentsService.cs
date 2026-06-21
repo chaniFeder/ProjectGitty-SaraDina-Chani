@@ -1,5 +1,6 @@
 ﻿using Bl.Api.ICustomerServices;
 using Bl.Models.Customers;
+using Dal.Api;
 using Dal.Models;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,33 @@ namespace Bl.Services.IAdvisorServices
     {
         public List<Document> GetMyDocuments(string customerId)
         {
-            throw new NotImplementedException();
+            return dal.Documents.Search(d => d.CustomerId == customerId);
         }
 
         public bool UploadDocument(string customerId, DocumentUploadDto document)
         {
-            throw new NotImplementedException();
+            string fileName = $"{Guid.NewGuid()}{document.FileExtension}";
+            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string filePath = Path.Combine(uploadsFolder, fileName);
+
+            File.WriteAllBytes(filePath, document.FileContent);
+
+            Document newDocument = new Document
+            {
+                CustomerId = document.CustomerId,
+                DocumentType = document.DocumentType,
+                DocumentName = document.DocumentName,
+                FilePath = filePath,
+                IsVerified = false
+            };
+
+            return dal.Documents.Create(newDocument);
         }
     }
 }
