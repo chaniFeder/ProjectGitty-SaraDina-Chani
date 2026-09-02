@@ -15,8 +15,8 @@
 ## 🎯 תפקידים במערכת
 
 - **לקוחות**: יצירת תיקים, מעקב אחר סטטוס, העלאת מסמכים ותיאום פגישות
-- **יועצים**: ניהול תיקים של לקוחות, בדיקת מסמכים, עדכון סטטוס, והמלצות לתוכניות משכנתא
-- **מנהלים**: ניהול בנקים, מעקב אחר מקרים ותחזוקת המערכת
+- **יועצים**: ניהול תיקים של לקוחות, בדיקת מסמכים, עדכון סטטוס, רישום לקוחות חדשים
+- **מנהלים**: ניהול בנקים, תוכניות משכנתא, יועצים, מעקב אחר מקרים וסטטיסטיקות
 
 ---
 
@@ -26,8 +26,8 @@
 Frontend (mortgage-ui)          Backend (Project)
 ├── React 19                    ├── ASP.NET Core 8
 ├── TypeScript                  ├── JWT Authentication
-├── Vite                        ├── Swagger/OpenAPI
-└── TailwindCSS                 └── SQLite Database
+├── Vite 8                      ├── Swagger/OpenAPI
+└── TailwindCSS 4               └── SQLite Database
                                     ├── Business Logic (BL)
                                     ├── Data Access Layer (DAL)
                                     └── API Controllers
@@ -41,19 +41,18 @@ Frontend (mortgage-ui)          Backend (Project)
 - React 19 + TypeScript
 - Vite 8
 - TailwindCSS 4
-- Zustand לניהול מצב
+- Zustand + Redux Toolkit לניהול מצב
 - Axios לקריאות HTTP
-- React Router לניתוב
-- Radix UI ו-Lucide React לרכיבי ממשק
+- React Router v7 לניתוב
+- Radix UI, Lucide React, React Hook Form + Zod לממשק וולידציה
 
 ### Backend (`Project/`)
-- ASP.NET Core 8
-- C#
-- SQLite
-- JWT לאימות
+- ASP.NET Core 8 / C#
+- SQLite + Entity Framework Core
+- JWT לאימות (תוקף 8 שעות)
 - Swagger/OpenAPI לתיעוד API
-- BL (Business Logic) לשכבת לוגיקה עסקית
-- DAL (Data Access Layer) לשכבת גישה לנתונים
+- BL (Business Logic) — שכבת לוגיקה עסקית
+- DAL (Data Access Layer) — שכבת גישה לנתונים
 
 ---
 
@@ -63,12 +62,12 @@ Frontend (mortgage-ui)          Backend (Project)
 ```
 mortgage-ui/
 ├── src/
-│   ├── api/                 # חיבור ל-API
-│   ├── components/          # רכיבים כלליים
-│   ├── features/            # מודולים לפי תפקידים
-│   ├── router/              # ניתוב והרשאות
-│   ├── store/               # Zustand state
-│   ├── types/               # טיפוסים של TypeScript
+│   ├── api/                 # חיבור ל-API (auth, customer, advisor, admin)
+│   ├── components/          # רכיבים כלליים (layout, ui)
+│   ├── features/            # מודולים לפי תפקידים (admin, advisor, auth, customer)
+│   ├── router/              # ניתוב והרשאות (ProtectedRoute)
+│   ├── store/               # Zustand + Redux state
+│   ├── types/               # טיפוסי TypeScript
 │   └── utils/               # פונקציות עזר
 ├── public/
 └── package.json
@@ -78,218 +77,188 @@ mortgage-ui/
 ```
 Project/
 ├── server/                  # API של ASP.NET Core
-│   ├── Controllers/        # בקרי Web API
-│   ├── Services/           # שירותי עיבוד
+│   ├── Controllers/
+│   │   ├── Admin/           # AdminController
+│   │   ├── Advisor/         # AdvisorCases, Appointments, Customers, Documents
+│   │   ├── AuthController
+│   │   ├── AdvisorsController
+│   │   ├── CustomerCasesController
+│   │   ├── CustomerAppointmentsController
+│   │   ├── CustomerDocumentsController
+│   │   ├── CustomerMortgageController
+│   │   └── CustomerProfileController
+│   ├── Services/            # JwtService
 │   ├── Program.cs
 │   └── appsettings.json
-├── BL/                     # לוגיקה עסקית
-│   ├── Services/
+├── Bl/                      # לוגיקה עסקית
+│   ├── Api/                 # ממשקים (ICustomerApi, IAdvisorApi, IAdminApi)
 │   ├── Models/
-│   └── Api/
-├── DAL/                    # גישה לנתונים
-│   ├── Services/
-│   ├── Api/
-│   ├── Models/
-│   └── database/
-└── Ui/                     # אפליקציית ממשק שרת
+│   └── Services/
+├── Dal/                     # גישה לנתונים
+│   ├── Api/                 # ממשקים (ICases, IUsers, IDocuments וכו')
+│   ├── Models/              # מודלים (Case, Customer, Bank, Appointment וכו')
+│   ├── Services/            # מימוש שירותי DAL
+│   ├── database/            # mortgage.db (SQLite)
+│   └── DalManager.cs
+└── Project.sln
 ```
 
 ---
 
 ## 💾 מסד נתונים
 
-המערכת משתמשת במסד SQLite עם טבלאות עיקריות עבור:
-- משתמשים
-- תיקים
-- בנקים
-- פגישות
-- מסמכים
-- תשלומים
+SQLite — נוצר אוטומטית בהרצה ראשונה. טבלאות עיקריות:
+- Users, Customers
+- Cases, Mortgages, MortgagePrograms
+- Banks
+- Appointments
+- Documents
+- Payments
+
+**משתמשי ברירת מחדל (seed):**
+| UserId | Username | Password | Role |
+|--------|----------|----------|------|
+| 000000001 | admin | admin123 | admin |
+| 000000002 | advisor1 | advisor123 | advisor |
 
 ---
 
 ## 🚀 איך להתחיל
 
 ### דרישות
-- Node.js 18+ (Frontend)
-- .NET 8 SDK (Backend)
+- Node.js 18+
+- .NET 8 SDK
 - Git
-- Visual Studio Code או Visual Studio 2022
 
 ### התקנה
 
-#### 1. שכפול הריפו
 ```bash
 git clone <repository-url>
 cd ProjectGitty-SaraDina-Chani
 ```
 
-#### 2. התקנת Frontend
+#### Frontend
 ```bash
 cd mortgage-ui
 npm install
-```
-
-#### 3. התקנת Backend
-```bash
-cd ../Project
-dotnet restore
-```
-
----
-
-## 💻 פיתוח
-
-### הפעלת Frontend
-```bash
-cd mortgage-ui
 npm run dev
 ```
+זמין ב-`http://localhost:5173`
 
-האתר יהיה זמין ב-`http://localhost:5173`
-
-### הפעלת Backend
-```bash
-cd Project
-dotnet run --project server/server.csproj
-```
-
----
-
-## 📌 קיצור
-
-הפרויקט מיועד להדגמת מערכת משכנתאות מלאה עם ממשק משתמש, שירותי backend, אימות ואנליזה בסיסית. README זה מיועד לשימוש בעברית ומסביר את מבנה הפרויקט, הדרישות והפעלה בסיסית.
-
-
-### Running the Backend
-
+#### Backend
 ```bash
 cd Project/server
 dotnet run
 ```
-API will be available at `https://localhost:7001` (or configured port)
-
-#### Development Features:
-- **Swagger UI**: Available at `/swagger` - test API endpoints
-- **Hot Reload**: Enabled for quick development iteration
-- **Database**: SQLite (auto-creates on first run)
-- **Authentication**: JWT tokens in Authorization header
-
----
-
-## 🔑 Key Features
-
-### Client Features
-- ✅ User registration and authentication
-- ✅ Create and manage mortgage cases
-- ✅ Upload required documents
-- ✅ Schedule and manage appointments
-- ✅ Track case status in real-time
-- ✅ View recommended banks based on profile
-- ✅ Manage payment schedules
-
-### Advisor Features
-- ✅ View assigned client cases
-- ✅ Process applications
-- ✅ Schedule meetings with clients
-- ✅ Review and validate documents
-- ✅ Provide recommendations
-- ✅ Track case progress
-
-### Admin Features
-- ✅ User and access management
-- ✅ Bank information management
-- ✅ Monitor all system cases
-- ✅ Generate reports and analytics
-- ✅ System configuration and settings
+זמין ב-`http://localhost:5269` / `https://localhost:7074`  
+Swagger UI: `http://localhost:5269/swagger`
 
 ---
 
 ## 🔐 Authentication Flow
 
-1. User registers or logs in via login page
-2. Backend validates credentials and generates JWT token
-3. Token stored in localStorage (frontend)
-4. Token sent with every request in Authorization header
-5. Protected routes verify token validity
-6. Routes redirect to login if token is invalid
+1. משתמש מתחבר דרך `POST /api/auth/login`
+2. Backend מחזיר JWT token (תוקף 8 שעות)
+3. Token נשמר ב-localStorage
+4. כל בקשה שולחת `Authorization: Bearer <token>`
+5. נתיבים מוגנים מאמתים את ה-token לפי role
+
+**Roles:** `customer`, `advisor`, `admin`
 
 ---
 
-## 📱 Frontend Pages
-
-- **`index.html`** - Login page
-- **`register.html`** - User registration
-- **`client-dashboard.html`** - Client main dashboard
-- **`admin-dashboard.html`** - Admin panel
-- **`new-case.html`** - Create new mortgage case
-- **`case-details.html`** - View/edit case details
-
----
-
-## 🔗 API Endpoints Overview
+## 🔗 API Endpoints
 
 ### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/refresh` - Refresh JWT token
+| Method | Endpoint | תיאור |
+|--------|----------|-------|
+| POST | `/api/auth/login` | התחברות |
+| POST | `/api/auth/register` | הרשמת לקוח חדש |
 
-### Customer APIs
-- `GET /api/customer/profile` - Get customer profile
-- `GET /api/customer/cases` - List customer cases
-- `POST /api/customer/cases` - Create new case
-- `GET /api/customer/cases/{id}` - Get case details
-- `POST /api/customer/documents` - Upload document
-- `GET /api/customer/appointments` - List appointments
+### Customer APIs (role: customer)
+| Method | Endpoint | תיאור |
+|--------|----------|-------|
+| GET | `/api/customer/profile` | פרופיל לקוח |
+| PUT | `/api/customer/profile/contact` | עדכון פרטי קשר |
+| GET | `/api/customer/cases` | תיקים של הלקוח |
+| GET | `/api/customer/appointments` | פגישות קרובות |
+| POST | `/api/customer/appointments` | בקשת פגישה |
+| GET | `/api/customer/documents` | מסמכים של הלקוח |
+| POST | `/api/customer/documents` | העלאת מסמך |
+| GET | `/api/customer/mortgages` | משכנתאות של הלקוח |
+| GET | `/api/customer/mortgages/{id}` | פרטי משכנתא |
+| GET | `/api/customer/mortgages/{id}/payments` | לוח תשלומים |
 
-### Advisor APIs
-- `GET /api/advisor/cases` - List advisor's cases
-- `POST /api/advisor/appointments` - Schedule appointment
-- `PUT /api/advisor/cases/{id}/status` - Update case status
+### Advisor APIs (role: advisor)
+| Method | Endpoint | תיאור |
+|--------|----------|-------|
+| GET | `/api/advisor/cases` | תיקים של היועץ |
+| POST | `/api/advisor/cases` | יצירת תיק |
+| PUT | `/api/advisor/cases/{id}/status` | עדכון סטטוס תיק |
+| GET | `/api/advisor/appointments` | פגישות של היועץ |
+| PUT | `/api/advisor/appointments/{id}/status` | עדכון סטטוס פגישה |
+| GET | `/api/advisor/customers` | כל הלקוחות |
+| GET | `/api/advisor/customers/{id}` | לקוח לפי ID |
+| POST | `/api/advisor/customers` | רישום לקוח חדש |
+| GET | `/api/advisor/documents/{customerId}` | מסמכי לקוח |
+| PUT | `/api/advisor/documents/{id}/verify` | אימות מסמך |
 
-### Admin APIs
-- `GET /api/admin/cases` - All system cases
-- `GET /api/admin/banks` - Manage banks
-- `POST /api/admin/banks` - Add new bank
+### Admin APIs (role: admin)
+| Method | Endpoint | תיאור |
+|--------|----------|-------|
+| GET | `/api/admin/statistics` | סטטיסטיקות מערכת |
+| GET | `/api/admin/cases` | תיקים פעילים |
+| GET | `/api/admin/banks` | רשימת בנקים |
+| POST | `/api/admin/banks` | הוספת בנק |
+| PUT | `/api/admin/banks/{id}` | עדכון בנק |
+| GET | `/api/admin/programs` | תוכניות משכנתא |
+| POST | `/api/admin/programs` | הוספת תוכנית |
+| PUT | `/api/admin/programs/{id}/rate` | עדכון ריבית |
+| GET | `/api/admin/users` | רשימת יועצים |
+| POST | `/api/admin/users` | הוספת יועץ |
 
-Detailed API documentation available in Swagger at `/swagger`
-
----
-
-## 📊 Supported Banks
-
-The system integrates information about major Israeli banks:
-- **Bank HaPoalim** (בנק הפועלים) - Interest: 3.5%-5.2%
-- **Bank Leumi** (בנק לאומי) - Interest: 3.8%-5.5%
-- **Bank Discount** (בנק דיסקונט) - Interest: 3.6%-5.0%
-- **Bank Mizrahi-Tefahot** (בנק מזרחי טפחות) - Interest: 3.7%-5.3%
+### General
+| Method | Endpoint | תיאור |
+|--------|----------|-------|
+| GET | `/api/advisors` | רשימת יועצים (לבחירה בפגישה) |
 
 ---
 
 ## 🔧 Configuration
 
-### Frontend Configuration
-- `vite.config.ts` - Vite build configuration
-- `tsconfig.json` - TypeScript settings
-- `eslint.config.js` - ESLint rules
+### Backend (`appsettings.json`)
+```json
+{
+  "Jwt": {
+    "Key": "...",
+    "Issuer": "MortgageSystem",
+    "Audience": "MortgageSystemUsers",
+    "ExpiryHours": 8
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=...mortgage.db"
+  },
+  "AllowedOrigins": "http://localhost:5173"
+}
+```
 
-### Backend Configuration
-- `appsettings.json` - General settings
-- `appsettings.Development.json` - Development environment settings
-- `.csproj` files - Project dependencies
+### Frontend
+- `vite.config.ts` — הגדרות build
+- `tsconfig.json` — הגדרות TypeScript
+- `eslint.config.js` — חוקי ESLint
 
 ---
 
-## 📝 Build & Deployment
+## 📝 Build
 
-### Frontend Build
+### Frontend
 ```bash
 cd mortgage-ui
 npm run build
-# Output in dist/ folder
+# פלט בתיקיית dist/
 ```
 
-### Backend Build
+### Backend
 ```bash
 cd Project
 dotnet build
@@ -300,29 +269,17 @@ dotnet publish -c Release
 
 ## 🐛 Troubleshooting
 
-### Frontend Issues
-- **Port already in use**: Change port in `vite.config.ts`
-- **Module not found**: Run `npm install` again
-- **TypeScript errors**: Run `npm run lint` to check
-
-### Backend Issues
-- **Database locked**: Delete `app.db` and restart
-- **Port conflicts**: Configure in `appsettings.json`
-- **CORS errors**: Check CORS policy in `Program.cs`
-
----
-
-## 📚 Additional Resources
-
-- Frontend Documentation: `mortgage-ui/README.md`
-- System Documentation: `mortgage_system/system-documentation.md`
-- Site Options: `mortgage_system/site-options-documentation.md`
+- **Frontend — port תפוס**: שנה ב-`vite.config.ts`
+- **Frontend — module not found**: הרץ `npm install`
+- **Backend — database locked**: מחק `mortgage.db` והפעל מחדש
+- **Backend — CORS errors**: בדוק `AllowedOrigins` ב-`appsettings.json`
+- **Backend — port conflicts**: שנה ב-`Properties/launchSettings.json`
 
 ---
 
 ## 👥 Team
 
-- **Project**: Sarahi & Chani
+- **Project**: Sara & Dina & Chani
 - **Role**: Full Stack Development
 
 ---
@@ -333,5 +290,4 @@ This project is private and for educational/professional use only.
 
 ---
 
-**Last Updated**: June 2025
-**Version**: 1.0.0
+**Last Updated**: June 2025 | **Version**: 1.0.0
